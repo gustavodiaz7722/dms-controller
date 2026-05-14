@@ -1,0 +1,8 @@
+service:
+  full_name: AWS Database Migration Service
+  short_name: DMS
+  link: https://aws.amazon.com/dms/
+  documentation: https://docs.aws.amazon.com/dms/
+api_versions:
+  - api_version: v1alpha1
+    status: available

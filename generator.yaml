@@ -1,0 +1,18 @@
+sdk_names:
+  model_name: database-migration-service
+  package_name: databasemigrationservice
+  
+ignore:
+  resource_names:
+      - DataMigration
+      - DataProvider
+      - Endpoint
+      - EventSubscription
+      - FleetAdvisorCollector
+      - InstanceProfile
+      - MigrationProject
+      - ReplicationConfig
+      - ReplicationInstance
+      - ReplicationSubnetGroup
+      - ReplicationTask
+

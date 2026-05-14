@@ -1,0 +1,40 @@
+# This configuration is a placeholder. Replace any values with relevant values for your
+# service controller project.
+---
+annotations:
+  capabilityLevel: Basic Install
+  shortDescription: AWS Database Migration Service controller is a service controller for managing Database Migration Service resources
+    in Kubernetes
+displayName: AWS Controllers for Kubernetes - Amazon Database Migration Service
+description: |-
+  Manage Amazon Database Migration Service resources in AWS from within your Kubernetes cluster.
+
+
+  **About Amazon Database Migration Service**
+
+
+  AWS Database Migration Service (AWS DMS) is a web service you can use to migrate data from your database that is on-premises, on an Amazon Relational Database Service (Amazon RDS) DB instance, or in a database on an Amazon Elastic Compute Cloud (Amazon EC2) instance to a database on an AWS service. These services can include a database on Amazon RDS or a database on an Amazon EC2 instance. You can also migrate a database from an AWS service to an on-premises database. You can migrate between source and target endpoints that use the same database engine, such as from an Oracle database to an Oracle database. You can also migrate between source and target endpoints that use different database engines, such as from an Oracle database to a PostgreSQL database.
+
+
+  **About the AWS Controllers for Kubernetes**
+
+
+  This controller is a component of the [AWS Controller for Kubernetes](https://github.com/aws/aws-controllers-k8s)
+  project. This project is currently in **developer preview**.
+
+
+  **Pre-Installation Steps**
+
+
+  Please follow the following link: [Red Hat OpenShift](https://aws-controllers-k8s.github.io/community/docs/user-docs/openshift/)
+samples:
+- kind: ExampleCustomKind
+  spec: '{}'
+- kind: SecondExampleCustomKind
+  spec: '{}'
+maintainers:
+- name: "dms maintainer team"
+  email: "ack-maintainers@amazon.com"
+links:
+- name: Amazon Database Migration Service Developer Resources
+  url: https://aws.amazon.com/Database Migration Service/developer-resources/
