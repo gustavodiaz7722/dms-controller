@@ -1,0 +1,9 @@
+apiVersion: dms.services.k8s.aws/v1alpha1
+kind: Certificate
+metadata:
+  name: $CERTIFICATE_NAME
+spec:
+  name: $CERTIFICATE_NAME
+  certificatePem:
+    name: $CERTIFICATE_SECRET_NAME
+    key: $CERTIFICATE_SECRET_KEY

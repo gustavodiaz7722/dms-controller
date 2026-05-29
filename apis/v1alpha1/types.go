@@ -27,3 +27,1086 @@ var (
 	_ = &aws.JSONValue{}
 	_ = ackv1alpha1.AWSAccountID("")
 )
+
+// Describes a quota for an Amazon Web Services account, for example the number
+// of replication instances allowed.
+type AccountQuota struct {
+	AccountQuotaName *string `json:"accountQuotaName,omitempty"`
+}
+
+// The name of an Availability Zone for use during database migration. AvailabilityZone
+// is an optional parameter to the CreateReplicationInstance (https://docs.aws.amazon.com/dms/latest/APIReference/API_CreateReplicationInstance.html)
+// operation, and it’s value relates to the Amazon Web Services Region of
+// an endpoint. For example, the availability zone of an endpoint in the us-east-1
+// region might be us-east-1a, us-east-1b, us-east-1c, or us-east-1d.
+type AvailabilityZone struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// Provides information about the errors that occurred during the analysis of
+// the source database.
+type BatchStartRecommendationsErrorEntry struct {
+	Code       *string `json:"code,omitempty"`
+	DatabaseID *string `json:"databaseID,omitempty"`
+	Message    *string `json:"message,omitempty"`
+}
+
+// The SSL certificate that can be used to encrypt connections between the endpoints
+// and the replication instance.
+type Certificate_SDK struct {
+	CertificateARN          *string      `json:"certificateARN,omitempty"`
+	CertificateCreationDate *metav1.Time `json:"certificateCreationDate,omitempty"`
+	CertificateIdentifier   *string      `json:"certificateIdentifier,omitempty"`
+	CertificateOwner        *string      `json:"certificateOwner,omitempty"`
+	CertificatePem          *string      `json:"certificatePem,omitempty"`
+	CertificateWallet       []byte       `json:"certificateWallet,omitempty"`
+	KeyLength               *int64       `json:"keyLength,omitempty"`
+	KMSKeyID                *string      `json:"kmsKeyID,omitempty"`
+	SigningAlgorithm        *string      `json:"signingAlgorithm,omitempty"`
+	ValidFromDate           *metav1.Time `json:"validFromDate,omitempty"`
+	ValidToDate             *metav1.Time `json:"validToDate,omitempty"`
+}
+
+// Describes a Fleet Advisor collector.
+type CollectorResponse struct {
+	CollectorName         *string `json:"collectorName,omitempty"`
+	CollectorReferencedID *string `json:"collectorReferencedID,omitempty"`
+	CollectorVersion      *string `json:"collectorVersion,omitempty"`
+	CreatedDate           *string `json:"createdDate,omitempty"`
+	Description           *string `json:"description,omitempty"`
+	LastDataReceived      *string `json:"lastDataReceived,omitempty"`
+	ModifiedDate          *string `json:"modifiedDate,omitempty"`
+	RegisteredDate        *string `json:"registeredDate,omitempty"`
+	S3BucketName          *string `json:"s3BucketName,omitempty"`
+	ServiceAccessRoleARN  *string `json:"serviceAccessRoleARN,omitempty"`
+}
+
+// Briefly describes a Fleet Advisor collector.
+type CollectorShortInfoResponse struct {
+	CollectorName         *string `json:"collectorName,omitempty"`
+	CollectorReferencedID *string `json:"collectorReferencedID,omitempty"`
+}
+
+// Configuration parameters for provisioning an DMS Serverless replication.
+type ComputeConfig struct {
+	AvailabilityZone           *string `json:"availabilityZone,omitempty"`
+	DNSNameServers             *string `json:"dnsNameServers,omitempty"`
+	KMSKeyID                   *string `json:"kmsKeyID,omitempty"`
+	MaxCapacityUnits           *int64  `json:"maxCapacityUnits,omitempty"`
+	MinCapacityUnits           *int64  `json:"minCapacityUnits,omitempty"`
+	PreferredMaintenanceWindow *string `json:"preferredMaintenanceWindow,omitempty"`
+	ReplicationSubnetGroupID   *string `json:"replicationSubnetGroupID,omitempty"`
+}
+
+// Status of the connection between an endpoint and a replication instance,
+// including Amazon Resource Names (ARNs) and the last error message issued.
+type Connection struct {
+	EndpointARN                   *string `json:"endpointARN,omitempty"`
+	EndpointIdentifier            *string `json:"endpointIdentifier,omitempty"`
+	LastFailureMessage            *string `json:"lastFailureMessage,omitempty"`
+	ReplicationInstanceARN        *string `json:"replicationInstanceARN,omitempty"`
+	ReplicationInstanceIdentifier *string `json:"replicationInstanceIdentifier,omitempty"`
+	Status                        *string `json:"status,omitempty"`
+}
+
+// This object provides information about a DMS data migration.
+type DataMigration struct {
+	DataMigrationARN     *string `json:"dataMigrationARN,omitempty"`
+	DataMigrationName    *string `json:"dataMigrationName,omitempty"`
+	DataMigrationStatus  *string `json:"dataMigrationStatus,omitempty"`
+	LastFailureMessage   *string `json:"lastFailureMessage,omitempty"`
+	MigrationProjectARN  *string `json:"migrationProjectARN,omitempty"`
+	ServiceAccessRoleARN *string `json:"serviceAccessRoleARN,omitempty"`
+	StopReason           *string `json:"stopReason,omitempty"`
+}
+
+// Options for configuring a data migration, including whether to enable CloudWatch
+// logs, and the selection rules to use to include or exclude database objects
+// from the migration.
+type DataMigrationSettings struct {
+	NumberOfJobs   *int64  `json:"numberOfJobs,omitempty"`
+	SelectionRules *string `json:"selectionRules,omitempty"`
+}
+
+// Provides information that defines a data provider.
+type DataProvider struct {
+	DataProviderARN  *string `json:"dataProviderARN,omitempty"`
+	DataProviderName *string `json:"dataProviderName,omitempty"`
+	Description      *string `json:"description,omitempty"`
+	Engine           *string `json:"engine,omitempty"`
+}
+
+// Information about a data provider.
+type DataProviderDescriptor struct {
+	DataProviderARN             *string `json:"dataProviderARN,omitempty"`
+	DataProviderName            *string `json:"dataProviderName,omitempty"`
+	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
+	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
+}
+
+// Information about a data provider.
+type DataProviderDescriptorDefinition struct {
+	DataProviderIdentifier      *string `json:"dataProviderIdentifier,omitempty"`
+	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
+	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
+}
+
+// Describes an inventory database instance for a Fleet Advisor collector.
+type DatabaseInstanceSoftwareDetailsResponse struct {
+	Engine         *string `json:"engine,omitempty"`
+	EngineEdition  *string `json:"engineEdition,omitempty"`
+	EngineVersion  *string `json:"engineVersion,omitempty"`
+	OsArchitecture *int64  `json:"osArchitecture,omitempty"`
+	ServicePack    *string `json:"servicePack,omitempty"`
+	SupportLevel   *string `json:"supportLevel,omitempty"`
+	Tooltip        *string `json:"tooltip,omitempty"`
+}
+
+// Describes a database in a Fleet Advisor collector inventory.
+type DatabaseResponse struct {
+	DatabaseID   *string `json:"databaseID,omitempty"`
+	DatabaseName *string `json:"databaseName,omitempty"`
+	IPAddress    *string `json:"ipAddress,omitempty"`
+}
+
+// Describes a database in a Fleet Advisor collector inventory.
+type DatabaseShortInfoResponse struct {
+	DatabaseEngine    *string `json:"databaseEngine,omitempty"`
+	DatabaseID        *string `json:"databaseID,omitempty"`
+	DatabaseIPAddress *string `json:"databaseIPAddress,omitempty"`
+	DatabaseName      *string `json:"databaseName,omitempty"`
+}
+
+// Provides error information about a schema conversion operation.
+type DefaultErrorDetails struct {
+	Message *string `json:"message,omitempty"`
+}
+
+// The settings in JSON format for the DMS Transfer type source endpoint.
+type DmsTransferSettings struct {
+	BucketName           *string `json:"bucketName,omitempty"`
+	ServiceAccessRoleARN *string `json:"serviceAccessRoleARN,omitempty"`
+}
+
+// Provides information that defines a DocumentDB data provider.
+type DocDBDataProviderSettings struct {
+	CertificateARN *string `json:"certificateARN,omitempty"`
+	DatabaseName   *string `json:"databaseName,omitempty"`
+	Port           *int64  `json:"port,omitempty"`
+	ServerName     *string `json:"serverName,omitempty"`
+}
+
+// Provides information that defines a DocumentDB endpoint.
+type DocDBSettings struct {
+	DatabaseName                *string `json:"databaseName,omitempty"`
+	DocsToInvestigate           *int64  `json:"docsToInvestigate,omitempty"`
+	KMSKeyID                    *string `json:"kmsKeyID,omitempty"`
+	Password                    *string `json:"password,omitempty"`
+	Port                        *int64  `json:"port,omitempty"`
+	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
+	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
+	ServerName                  *string `json:"serverName,omitempty"`
+	Username                    *string `json:"username,omitempty"`
+}
+
+// Provides the Amazon Resource Name (ARN) of the Identity and Access Management
+// (IAM) role used to define an Amazon DynamoDB target endpoint.
+type DynamoDBSettings struct {
+	ServiceAccessRoleARN *string `json:"serviceAccessRoleARN,omitempty"`
+}
+
+// Provides information that defines an OpenSearch endpoint.
+type ElasticsearchSettings struct {
+	EndpointURI             *string `json:"endpointURI,omitempty"`
+	ErrorRetryDuration      *int64  `json:"errorRetryDuration,omitempty"`
+	FullLoadErrorPercentage *int64  `json:"fullLoadErrorPercentage,omitempty"`
+	ServiceAccessRoleARN    *string `json:"serviceAccessRoleARN,omitempty"`
+}
+
+// Describes an endpoint of a database instance in response to operations such
+// as the following:
+//
+//   - CreateEndpoint
+//
+//   - DescribeEndpoint
+//
+//   - ModifyEndpoint
+type Endpoint struct {
+	CertificateARN            *string `json:"certificateARN,omitempty"`
+	DatabaseName              *string `json:"databaseName,omitempty"`
+	EndpointARN               *string `json:"endpointARN,omitempty"`
+	EndpointIdentifier        *string `json:"endpointIdentifier,omitempty"`
+	EngineDisplayName         *string `json:"engineDisplayName,omitempty"`
+	EngineName                *string `json:"engineName,omitempty"`
+	ExternalID                *string `json:"externalID,omitempty"`
+	ExternalTableDefinition   *string `json:"externalTableDefinition,omitempty"`
+	ExtraConnectionAttributes *string `json:"extraConnectionAttributes,omitempty"`
+	KMSKeyID                  *string `json:"kmsKeyID,omitempty"`
+	Port                      *int64  `json:"port,omitempty"`
+	ServerName                *string `json:"serverName,omitempty"`
+	ServiceAccessRoleARN      *string `json:"serviceAccessRoleARN,omitempty"`
+	Status                    *string `json:"status,omitempty"`
+	Username                  *string `json:"username,omitempty"`
+}
+
+// Endpoint settings.
+type EndpointSetting struct {
+	Applicability *string `json:"applicability,omitempty"`
+	DefaultValue  *string `json:"defaultValue,omitempty"`
+	IntValueMax   *int64  `json:"intValueMax,omitempty"`
+	IntValueMin   *int64  `json:"intValueMin,omitempty"`
+	Name          *string `json:"name,omitempty"`
+	Units         *string `json:"units,omitempty"`
+}
+
+// Provides information about a replication instance version.
+type EngineVersion struct {
+	AutoUpgradeDate  *metav1.Time `json:"autoUpgradeDate,omitempty"`
+	DeprecationDate  *metav1.Time `json:"deprecationDate,omitempty"`
+	ForceUpgradeDate *metav1.Time `json:"forceUpgradeDate,omitempty"`
+	LaunchDate       *metav1.Time `json:"launchDate,omitempty"`
+	Lifecycle        *string      `json:"lifecycle,omitempty"`
+	Version          *string      `json:"version,omitempty"`
+}
+
+// Describes an identifiable significant activity that affects a replication
+// instance or task. This object can provide the message, the available event
+// categories, the date and source of the event, and the DMS resource type.
+type Event struct {
+	Date             *metav1.Time `json:"date,omitempty"`
+	Message          *string      `json:"message,omitempty"`
+	SourceIdentifier *string      `json:"sourceIdentifier,omitempty"`
+}
+
+// Lists categories of events subscribed to, and generated by, the applicable
+// DMS resource type. This data type appears in response to the DescribeEventCategories
+// (https://docs.aws.amazon.com/dms/latest/APIReference/API_EventCategoryGroup.html)
+// action.
+type EventCategoryGroup struct {
+	SourceType *string `json:"sourceType,omitempty"`
+}
+
+// Describes an event notification subscription created by the CreateEventSubscription
+// operation.
+type EventSubscription struct {
+	CustSubscriptionID       *string `json:"custSubscriptionID,omitempty"`
+	CustomerAWSID            *string `json:"customerAWSID,omitempty"`
+	SNSTopicARN              *string `json:"snsTopicARN,omitempty"`
+	SourceType               *string `json:"sourceType,omitempty"`
+	Status                   *string `json:"status,omitempty"`
+	SubscriptionCreationTime *string `json:"subscriptionCreationTime,omitempty"`
+}
+
+// Provides information about an exported metadata model assessment.
+type ExportMetadataModelAssessmentResultEntry struct {
+	ObjectURL   *string `json:"objectURL,omitempty"`
+	S3ObjectKey *string `json:"s3ObjectKey,omitempty"`
+}
+
+// Provides information about a metadata model assessment exported to SQL.
+type ExportSQLDetails struct {
+	ObjectURL   *string `json:"objectURL,omitempty"`
+	S3ObjectKey *string `json:"s3ObjectKey,omitempty"`
+}
+
+// Identifies the name and value of a filter object. This filter is used to
+// limit the number and type of DMS objects that are returned for a particular
+// Describe* call or similar operation. Filters are used as an optional parameter
+// for certain API operations.
+type Filter struct {
+	Name   *string   `json:"name,omitempty"`
+	Values []*string `json:"values,omitempty"`
+}
+
+// Describes a large-scale assessment (LSA) analysis run by a Fleet Advisor
+// collector.
+type FleetAdvisorLsaAnalysisResponse struct {
+	LsaAnalysisID *string `json:"lsaAnalysisID,omitempty"`
+	Status        *string `json:"status,omitempty"`
+}
+
+// Describes a schema object in a Fleet Advisor collector inventory.
+type FleetAdvisorSchemaObjectResponse struct {
+	ObjectType *string `json:"objectType,omitempty"`
+	SchemaID   *string `json:"schemaID,omitempty"`
+}
+
+// Settings in JSON format for the source GCP MySQL endpoint.
+type GcpMySQLSettings struct {
+	AfterConnectScript          *string `json:"afterConnectScript,omitempty"`
+	DatabaseName                *string `json:"databaseName,omitempty"`
+	EventsPollInterval          *int64  `json:"eventsPollInterval,omitempty"`
+	MaxFileSize                 *int64  `json:"maxFileSize,omitempty"`
+	ParallelLoadThreads         *int64  `json:"parallelLoadThreads,omitempty"`
+	Password                    *string `json:"password,omitempty"`
+	Port                        *int64  `json:"port,omitempty"`
+	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
+	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
+	ServerName                  *string `json:"serverName,omitempty"`
+	ServerTimezone              *string `json:"serverTimezone,omitempty"`
+	Username                    *string `json:"username,omitempty"`
+}
+
+// Provides information that defines an IBM Db2 LUW endpoint.
+type IBMDB2Settings struct {
+	CurrentLsn                  *string `json:"currentLsn,omitempty"`
+	DatabaseName                *string `json:"databaseName,omitempty"`
+	LoadTimeout                 *int64  `json:"loadTimeout,omitempty"`
+	MaxFileSize                 *int64  `json:"maxFileSize,omitempty"`
+	MaxKBytesPerRead            *int64  `json:"maxKBytesPerRead,omitempty"`
+	Password                    *string `json:"password,omitempty"`
+	Port                        *int64  `json:"port,omitempty"`
+	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
+	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
+	ServerName                  *string `json:"serverName,omitempty"`
+	Username                    *string `json:"username,omitempty"`
+	WriteBufferSize             *int64  `json:"writeBufferSize,omitempty"`
+}
+
+// Provides information about an IBM DB2 LUW data provider.
+type IbmDB2LuwDataProviderSettings struct {
+	CertificateARN  *string `json:"certificateARN,omitempty"`
+	DatabaseName    *string `json:"databaseName,omitempty"`
+	Port            *int64  `json:"port,omitempty"`
+	S3AccessRoleARN *string `json:"s3AccessRoleARN,omitempty"`
+	S3Path          *string `json:"s3Path,omitempty"`
+	ServerName      *string `json:"serverName,omitempty"`
+}
+
+// Provides information about an IBM DB2 for z/OS data provider.
+type IbmDB2ZOsDataProviderSettings struct {
+	CertificateARN  *string `json:"certificateARN,omitempty"`
+	DatabaseName    *string `json:"databaseName,omitempty"`
+	Port            *int64  `json:"port,omitempty"`
+	S3AccessRoleARN *string `json:"s3AccessRoleARN,omitempty"`
+	S3Path          *string `json:"s3Path,omitempty"`
+	ServerName      *string `json:"serverName,omitempty"`
+}
+
+// Provides information that defines an instance profile.
+type InstanceProfile struct {
+	AvailabilityZone      *string `json:"availabilityZone,omitempty"`
+	Description           *string `json:"description,omitempty"`
+	InstanceProfileARN    *string `json:"instanceProfileARN,omitempty"`
+	InstanceProfileName   *string `json:"instanceProfileName,omitempty"`
+	KMSKeyARN             *string `json:"kmsKeyARN,omitempty"`
+	NetworkType           *string `json:"networkType,omitempty"`
+	SubnetGroupIdentifier *string `json:"subnetGroupIdentifier,omitempty"`
+}
+
+// Describes a Fleet Advisor collector inventory.
+type InventoryData struct {
+	NumberOfDatabases *int64 `json:"numberOfDatabases,omitempty"`
+	NumberOfSchemas   *int64 `json:"numberOfSchemas,omitempty"`
+}
+
+// Provides information that describes an Apache Kafka endpoint. This information
+// includes the output format of records applied to the endpoint and details
+// of transaction and control table data information.
+type KafkaSettings struct {
+	Broker                  *string `json:"broker,omitempty"`
+	MessageMaxBytes         *int64  `json:"messageMaxBytes,omitempty"`
+	SASLPassword            *string `json:"saslPassword,omitempty"`
+	SASLUsername            *string `json:"saslUsername,omitempty"`
+	SSLCaCertificateARN     *string `json:"sslCaCertificateARN,omitempty"`
+	SSLClientCertificateARN *string `json:"sslClientCertificateARN,omitempty"`
+	SSLClientKeyARN         *string `json:"sslClientKeyARN,omitempty"`
+	SSLClientKeyPassword    *string `json:"sslClientKeyPassword,omitempty"`
+	Topic                   *string `json:"topic,omitempty"`
+}
+
+// Specifies the settings required for kerberos authentication when creating
+// the replication instance.
+type KerberosAuthenticationSettings struct {
+	KeyCacheSecretIAMARN *string `json:"keyCacheSecretIAMARN,omitempty"`
+	KeyCacheSecretID     *string `json:"keyCacheSecretID,omitempty"`
+	Krb5FileContents     *string `json:"krb5FileContents,omitempty"`
+}
+
+// Provides information that describes an Amazon Kinesis Data Stream endpoint.
+// This information includes the output format of records applied to the endpoint
+// and details of transaction and control table data information.
+type KinesisSettings struct {
+	ServiceAccessRoleARN *string `json:"serviceAccessRoleARN,omitempty"`
+	StreamARN            *string `json:"streamARN,omitempty"`
+}
+
+// Provides information that defines a Lakehouse endpoint. This endpoint type
+// is used for zero-ETL integrations with Lakehouse data warehouses.
+type LakehouseSettings struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// Provides information about the limitations of target Amazon Web Services
+// engines.
+//
+// Your source database might include features that the target Amazon Web Services
+// engine doesn't support. Fleet Advisor lists these features as limitations.
+// You should consider these limitations during database migration. For each
+// limitation, Fleet Advisor recommends an action that you can take to address
+// or avoid this limitation.
+type Limitation struct {
+	DatabaseID  *string `json:"databaseID,omitempty"`
+	Description *string `json:"description,omitempty"`
+	EngineName  *string `json:"engineName,omitempty"`
+	Impact      *string `json:"impact,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	Type        *string `json:"type_,omitempty"`
+}
+
+// Provides information that defines a MariaDB data provider.
+type MariaDBDataProviderSettings struct {
+	CertificateARN  *string `json:"certificateARN,omitempty"`
+	Port            *int64  `json:"port,omitempty"`
+	S3AccessRoleARN *string `json:"s3AccessRoleARN,omitempty"`
+	S3Path          *string `json:"s3Path,omitempty"`
+	ServerName      *string `json:"serverName,omitempty"`
+}
+
+// A reference to a metadata model, including its name and selection rules for
+// location identification.
+type MetadataModelReference struct {
+	MetadataModelName *string `json:"metadataModelName,omitempty"`
+	SelectionRules    *string `json:"selectionRules,omitempty"`
+}
+
+// Provides information that defines a Microsoft SQL Server data provider.
+type MicrosoftSQLServerDataProviderSettings struct {
+	CertificateARN  *string `json:"certificateARN,omitempty"`
+	DatabaseName    *string `json:"databaseName,omitempty"`
+	Port            *int64  `json:"port,omitempty"`
+	S3AccessRoleARN *string `json:"s3AccessRoleARN,omitempty"`
+	S3Path          *string `json:"s3Path,omitempty"`
+	ServerName      *string `json:"serverName,omitempty"`
+}
+
+// Provides information that defines a Microsoft SQL Server endpoint.
+type MicrosoftSQLServerSettings struct {
+	BcpPacketSize               *int64  `json:"bcpPacketSize,omitempty"`
+	ControlTablesFileGroup      *string `json:"controlTablesFileGroup,omitempty"`
+	DatabaseName                *string `json:"databaseName,omitempty"`
+	Password                    *string `json:"password,omitempty"`
+	Port                        *int64  `json:"port,omitempty"`
+	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
+	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
+	ServerName                  *string `json:"serverName,omitempty"`
+	Username                    *string `json:"username,omitempty"`
+}
+
+// Provides information that defines a migration project.
+type MigrationProject struct {
+	Description          *string `json:"description,omitempty"`
+	InstanceProfileARN   *string `json:"instanceProfileARN,omitempty"`
+	InstanceProfileName  *string `json:"instanceProfileName,omitempty"`
+	MigrationProjectARN  *string `json:"migrationProjectARN,omitempty"`
+	MigrationProjectName *string `json:"migrationProjectName,omitempty"`
+	TransformationRules  *string `json:"transformationRules,omitempty"`
+}
+
+// Provides information that defines a MongoDB data provider.
+type MongoDBDataProviderSettings struct {
+	AuthSource     *string `json:"authSource,omitempty"`
+	CertificateARN *string `json:"certificateARN,omitempty"`
+	DatabaseName   *string `json:"databaseName,omitempty"`
+	Port           *int64  `json:"port,omitempty"`
+	ServerName     *string `json:"serverName,omitempty"`
+}
+
+// Provides information that defines a MongoDB endpoint.
+type MongoDBSettings struct {
+	AuthSource                  *string `json:"authSource,omitempty"`
+	DatabaseName                *string `json:"databaseName,omitempty"`
+	DocsToInvestigate           *string `json:"docsToInvestigate,omitempty"`
+	ExtractDocID                *string `json:"extractDocID,omitempty"`
+	KMSKeyID                    *string `json:"kmsKeyID,omitempty"`
+	Password                    *string `json:"password,omitempty"`
+	Port                        *int64  `json:"port,omitempty"`
+	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
+	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
+	ServerName                  *string `json:"serverName,omitempty"`
+	Username                    *string `json:"username,omitempty"`
+}
+
+// Provides information that defines a MySQL data provider.
+type MySQLDataProviderSettings struct {
+	CertificateARN  *string `json:"certificateARN,omitempty"`
+	Port            *int64  `json:"port,omitempty"`
+	S3AccessRoleARN *string `json:"s3AccessRoleARN,omitempty"`
+	S3Path          *string `json:"s3Path,omitempty"`
+	ServerName      *string `json:"serverName,omitempty"`
+}
+
+// Provides information that defines a MySQL endpoint.
+type MySQLSettings struct {
+	AfterConnectScript          *string `json:"afterConnectScript,omitempty"`
+	DatabaseName                *string `json:"databaseName,omitempty"`
+	EventsPollInterval          *int64  `json:"eventsPollInterval,omitempty"`
+	ExecuteTimeout              *int64  `json:"executeTimeout,omitempty"`
+	MaxFileSize                 *int64  `json:"maxFileSize,omitempty"`
+	ParallelLoadThreads         *int64  `json:"parallelLoadThreads,omitempty"`
+	Password                    *string `json:"password,omitempty"`
+	Port                        *int64  `json:"port,omitempty"`
+	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
+	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
+	ServerName                  *string `json:"serverName,omitempty"`
+	ServerTimezone              *string `json:"serverTimezone,omitempty"`
+	ServiceAccessRoleARN        *string `json:"serviceAccessRoleARN,omitempty"`
+	Username                    *string `json:"username,omitempty"`
+}
+
+// Provides information that defines an Amazon Neptune endpoint.
+type NeptuneSettings struct {
+	ErrorRetryDuration   *int64  `json:"errorRetryDuration,omitempty"`
+	MaxFileSize          *int64  `json:"maxFileSize,omitempty"`
+	MaxRetryCount        *int64  `json:"maxRetryCount,omitempty"`
+	S3BucketFolder       *string `json:"s3BucketFolder,omitempty"`
+	S3BucketName         *string `json:"s3BucketName,omitempty"`
+	ServiceAccessRoleARN *string `json:"serviceAccessRoleARN,omitempty"`
+}
+
+// Provides information that defines an Oracle data provider.
+type OracleDataProviderSettings struct {
+	AsmServer                                       *string `json:"asmServer,omitempty"`
+	CertificateARN                                  *string `json:"certificateARN,omitempty"`
+	DatabaseName                                    *string `json:"databaseName,omitempty"`
+	Port                                            *int64  `json:"port,omitempty"`
+	S3AccessRoleARN                                 *string `json:"s3AccessRoleARN,omitempty"`
+	S3Path                                          *string `json:"s3Path,omitempty"`
+	SecretsManagerOracleAsmAccessRoleARN            *string `json:"secretsManagerOracleAsmAccessRoleARN,omitempty"`
+	SecretsManagerOracleAsmSecretID                 *string `json:"secretsManagerOracleAsmSecretID,omitempty"`
+	SecretsManagerSecurityDBEncryptionAccessRoleARN *string `json:"secretsManagerSecurityDBEncryptionAccessRoleARN,omitempty"`
+	SecretsManagerSecurityDBEncryptionSecretID      *string `json:"secretsManagerSecurityDBEncryptionSecretID,omitempty"`
+	ServerName                                      *string `json:"serverName,omitempty"`
+}
+
+// Provides information that defines an Oracle endpoint.
+type OracleSettings struct {
+	AdditionalArchivedLogDestID            *int64  `json:"additionalArchivedLogDestID,omitempty"`
+	ArchivedLogDestID                      *int64  `json:"archivedLogDestID,omitempty"`
+	AsmPassword                            *string `json:"asmPassword,omitempty"`
+	AsmServer                              *string `json:"asmServer,omitempty"`
+	AsmUser                                *string `json:"asmUser,omitempty"`
+	DatabaseName                           *string `json:"databaseName,omitempty"`
+	NumberDatatypeScale                    *int64  `json:"numberDatatypeScale,omitempty"`
+	OpenTransactionWindow                  *int64  `json:"openTransactionWindow,omitempty"`
+	OraclePathPrefix                       *string `json:"oraclePathPrefix,omitempty"`
+	ParallelAsmReadThreads                 *int64  `json:"parallelAsmReadThreads,omitempty"`
+	Password                               *string `json:"password,omitempty"`
+	Port                                   *int64  `json:"port,omitempty"`
+	ReadAheadBlocks                        *int64  `json:"readAheadBlocks,omitempty"`
+	RetryInterval                          *int64  `json:"retryInterval,omitempty"`
+	SecretsManagerAccessRoleARN            *string `json:"secretsManagerAccessRoleARN,omitempty"`
+	SecretsManagerOracleAsmAccessRoleARN   *string `json:"secretsManagerOracleAsmAccessRoleARN,omitempty"`
+	SecretsManagerOracleAsmSecretID        *string `json:"secretsManagerOracleAsmSecretID,omitempty"`
+	SecretsManagerSecretID                 *string `json:"secretsManagerSecretID,omitempty"`
+	SecurityDBEncryption                   *string `json:"securityDBEncryption,omitempty"`
+	SecurityDBEncryptionName               *string `json:"securityDBEncryptionName,omitempty"`
+	ServerName                             *string `json:"serverName,omitempty"`
+	SpatialDataOptionToGeoJSONFunctionName *string `json:"spatialDataOptionToGeoJSONFunctionName,omitempty"`
+	StandbyDelayTime                       *int64  `json:"standbyDelayTime,omitempty"`
+	UsePathPrefix                          *string `json:"usePathPrefix,omitempty"`
+	Username                               *string `json:"username,omitempty"`
+}
+
+// In response to the DescribeOrderableReplicationInstances operation, this
+// object describes an available replication instance. This description includes
+// the replication instance's type, engine version, and allocated storage.
+type OrderableReplicationInstance struct {
+	EngineVersion *string `json:"engineVersion,omitempty"`
+	StorageType   *string `json:"storageType,omitempty"`
+}
+
+// Describes a maintenance action pending for an DMS resource, including when
+// and how it will be applied. This data type is a response element to the DescribePendingMaintenanceActions
+// operation.
+type PendingMaintenanceAction struct {
+	Action               *string      `json:"action,omitempty"`
+	AutoAppliedAfterDate *metav1.Time `json:"autoAppliedAfterDate,omitempty"`
+	CurrentApplyDate     *metav1.Time `json:"currentApplyDate,omitempty"`
+	Description          *string      `json:"description,omitempty"`
+	ForcedApplyDate      *metav1.Time `json:"forcedApplyDate,omitempty"`
+	OptInStatus          *string      `json:"optInStatus,omitempty"`
+}
+
+// Provides information that defines a PostgreSQL data provider.
+type PostgreSQLDataProviderSettings struct {
+	CertificateARN  *string `json:"certificateARN,omitempty"`
+	DatabaseName    *string `json:"databaseName,omitempty"`
+	Port            *int64  `json:"port,omitempty"`
+	S3AccessRoleARN *string `json:"s3AccessRoleARN,omitempty"`
+	S3Path          *string `json:"s3Path,omitempty"`
+	ServerName      *string `json:"serverName,omitempty"`
+}
+
+// Provides information that defines a PostgreSQL endpoint.
+type PostgreSQLSettings struct {
+	AfterConnectScript          *string `json:"afterConnectScript,omitempty"`
+	BabelfishDatabaseName       *string `json:"babelfishDatabaseName,omitempty"`
+	DatabaseName                *string `json:"databaseName,omitempty"`
+	DdlArtifactsSchema          *string `json:"ddlArtifactsSchema,omitempty"`
+	ExecuteTimeout              *int64  `json:"executeTimeout,omitempty"`
+	HeartbeatFrequency          *int64  `json:"heartbeatFrequency,omitempty"`
+	HeartbeatSchema             *string `json:"heartbeatSchema,omitempty"`
+	MaxFileSize                 *int64  `json:"maxFileSize,omitempty"`
+	Password                    *string `json:"password,omitempty"`
+	Port                        *int64  `json:"port,omitempty"`
+	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
+	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
+	ServerName                  *string `json:"serverName,omitempty"`
+	ServiceAccessRoleARN        *string `json:"serviceAccessRoleARN,omitempty"`
+	SlotName                    *string `json:"slotName,omitempty"`
+	Username                    *string `json:"username,omitempty"`
+}
+
+// The results returned in describe-replications to display the results of the
+// premigration assessment from the replication configuration.
+type PremigrationAssessmentStatus struct {
+	LastFailureMessage                    *string      `json:"lastFailureMessage,omitempty"`
+	PremigrationAssessmentRunARN          *string      `json:"premigrationAssessmentRunARN,omitempty"`
+	PremigrationAssessmentRunCreationDate *metav1.Time `json:"premigrationAssessmentRunCreationDate,omitempty"`
+	ResultEncryptionMode                  *string      `json:"resultEncryptionMode,omitempty"`
+	ResultKMSKeyARN                       *string      `json:"resultKMSKeyARN,omitempty"`
+	ResultLocationBucket                  *string      `json:"resultLocationBucket,omitempty"`
+	ResultLocationFolder                  *string      `json:"resultLocationFolder,omitempty"`
+	Status                                *string      `json:"status,omitempty"`
+}
+
+// The database object that the schema conversion operation currently uses.
+type ProcessedObject struct {
+	EndpointType *string `json:"endpointType,omitempty"`
+	Name         *string `json:"name,omitempty"`
+	Type         *string `json:"type_,omitempty"`
+}
+
+// Provides information about the progress of the schema conversion operation.
+type Progress struct {
+	ProgressStep *string `json:"progressStep,omitempty"`
+}
+
+// Information about provisioning resources for an DMS serverless replication.
+type ProvisionData struct {
+	DateNewProvisioningDataAvailable *metav1.Time `json:"dateNewProvisioningDataAvailable,omitempty"`
+	DateProvisioned                  *metav1.Time `json:"dateProvisioned,omitempty"`
+	ProvisionState                   *string      `json:"provisionState,omitempty"`
+	ReasonForNewProvisioningData     *string      `json:"reasonForNewProvisioningData,omitempty"`
+}
+
+// Provides information that describes the configuration of the recommended
+// target engine on Amazon RDS.
+type RdsConfiguration struct {
+	DeploymentOption *string `json:"deploymentOption,omitempty"`
+	EngineEdition    *string `json:"engineEdition,omitempty"`
+	EngineVersion    *string `json:"engineVersion,omitempty"`
+	InstanceType     *string `json:"instanceType,omitempty"`
+	StorageIOPS      *int64  `json:"storageIOPS,omitempty"`
+	StorageSize      *int64  `json:"storageSize,omitempty"`
+	StorageType      *string `json:"storageType,omitempty"`
+}
+
+// Provides information that describes the requirements to the target engine
+// on Amazon RDS.
+type RdsRequirements struct {
+	DeploymentOption *string `json:"deploymentOption,omitempty"`
+	EngineEdition    *string `json:"engineEdition,omitempty"`
+	EngineVersion    *string `json:"engineVersion,omitempty"`
+	StorageIOPS      *int64  `json:"storageIOPS,omitempty"`
+	StorageSize      *int64  `json:"storageSize,omitempty"`
+}
+
+// Provides information that describes a recommendation of a target engine.
+//
+// A recommendation is a set of possible Amazon Web Services target engines
+// that you can choose to migrate your source on-premises database. In this
+// set, Fleet Advisor suggests a single target engine as the right sized migration
+// destination. To determine this rightsized migration destination, Fleet Advisor
+// uses the inventory metadata and metrics from data collector. You can use
+// recommendations before the start of migration to save costs and reduce risks.
+//
+// With recommendations, you can explore different target options and compare
+// metrics, so you can make an informed decision when you choose the migration
+// target.
+type Recommendation struct {
+	CreatedDate *string `json:"createdDate,omitempty"`
+	DatabaseID  *string `json:"databaseID,omitempty"`
+	EngineName  *string `json:"engineName,omitempty"`
+	Status      *string `json:"status,omitempty"`
+}
+
+// Provides information about the required target engine settings.
+type RecommendationSettings struct {
+	InstanceSizingType *string `json:"instanceSizingType,omitempty"`
+	WorkloadType       *string `json:"workloadType,omitempty"`
+}
+
+// Provides information that defines a Redis target endpoint.
+type RedisSettings struct {
+	AuthPassword        *string `json:"authPassword,omitempty"`
+	AuthUserName        *string `json:"authUserName,omitempty"`
+	ServerName          *string `json:"serverName,omitempty"`
+	SSLCaCertificateARN *string `json:"sslCaCertificateARN,omitempty"`
+}
+
+// Provides information that defines an Amazon Redshift data provider.
+type RedshiftDataProviderSettings struct {
+	DatabaseName    *string `json:"databaseName,omitempty"`
+	Port            *int64  `json:"port,omitempty"`
+	S3AccessRoleARN *string `json:"s3AccessRoleARN,omitempty"`
+	S3Path          *string `json:"s3Path,omitempty"`
+	ServerName      *string `json:"serverName,omitempty"`
+}
+
+// Provides information that defines an Amazon Redshift endpoint.
+type RedshiftSettings struct {
+	AfterConnectScript           *string `json:"afterConnectScript,omitempty"`
+	BucketFolder                 *string `json:"bucketFolder,omitempty"`
+	BucketName                   *string `json:"bucketName,omitempty"`
+	ConnectionTimeout            *int64  `json:"connectionTimeout,omitempty"`
+	DatabaseName                 *string `json:"databaseName,omitempty"`
+	DateFormat                   *string `json:"dateFormat,omitempty"`
+	FileTransferUploadStreams    *int64  `json:"fileTransferUploadStreams,omitempty"`
+	LoadTimeout                  *int64  `json:"loadTimeout,omitempty"`
+	MaxFileSize                  *int64  `json:"maxFileSize,omitempty"`
+	Password                     *string `json:"password,omitempty"`
+	Port                         *int64  `json:"port,omitempty"`
+	ReplaceChars                 *string `json:"replaceChars,omitempty"`
+	ReplaceInvalidChars          *string `json:"replaceInvalidChars,omitempty"`
+	SecretsManagerAccessRoleARN  *string `json:"secretsManagerAccessRoleARN,omitempty"`
+	SecretsManagerSecretID       *string `json:"secretsManagerSecretID,omitempty"`
+	ServerName                   *string `json:"serverName,omitempty"`
+	ServerSideEncryptionKMSKeyID *string `json:"serverSideEncryptionKMSKeyID,omitempty"`
+	ServiceAccessRoleARN         *string `json:"serviceAccessRoleARN,omitempty"`
+	TimeFormat                   *string `json:"timeFormat,omitempty"`
+	Username                     *string `json:"username,omitempty"`
+	WriteBufferSize              *int64  `json:"writeBufferSize,omitempty"`
+}
+
+// Provides information that describes status of a schema at an endpoint specified
+// by the DescribeRefreshSchemaStatus operation.
+type RefreshSchemasStatus struct {
+	EndpointARN            *string      `json:"endpointARN,omitempty"`
+	LastFailureMessage     *string      `json:"lastFailureMessage,omitempty"`
+	LastRefreshDate        *metav1.Time `json:"lastRefreshDate,omitempty"`
+	ReplicationInstanceARN *string      `json:"replicationInstanceARN,omitempty"`
+}
+
+// Provides information that describes a serverless replication created by the
+// CreateReplication operation.
+type Replication struct {
+	CdcStartPosition            *string      `json:"cdcStartPosition,omitempty"`
+	CdcStartTime                *metav1.Time `json:"cdcStartTime,omitempty"`
+	CdcStopPosition             *string      `json:"cdcStopPosition,omitempty"`
+	RecoveryCheckpoint          *string      `json:"recoveryCheckpoint,omitempty"`
+	ReplicationConfigARN        *string      `json:"replicationConfigARN,omitempty"`
+	ReplicationConfigIdentifier *string      `json:"replicationConfigIdentifier,omitempty"`
+	ReplicationCreateTime       *metav1.Time `json:"replicationCreateTime,omitempty"`
+	ReplicationDeprovisionTime  *metav1.Time `json:"replicationDeprovisionTime,omitempty"`
+	ReplicationLastStopTime     *metav1.Time `json:"replicationLastStopTime,omitempty"`
+	ReplicationUpdateTime       *metav1.Time `json:"replicationUpdateTime,omitempty"`
+	SourceEndpointARN           *string      `json:"sourceEndpointARN,omitempty"`
+	StartReplicationType        *string      `json:"startReplicationType,omitempty"`
+	Status                      *string      `json:"status,omitempty"`
+	StopReason                  *string      `json:"stopReason,omitempty"`
+	TargetEndpointARN           *string      `json:"targetEndpointARN,omitempty"`
+}
+
+// This object provides configuration information about a serverless replication.
+type ReplicationConfig struct {
+	ReplicationConfigARN        *string      `json:"replicationConfigARN,omitempty"`
+	ReplicationConfigCreateTime *metav1.Time `json:"replicationConfigCreateTime,omitempty"`
+	ReplicationConfigIdentifier *string      `json:"replicationConfigIdentifier,omitempty"`
+	ReplicationConfigUpdateTime *metav1.Time `json:"replicationConfigUpdateTime,omitempty"`
+	ReplicationSettings         *string      `json:"replicationSettings,omitempty"`
+	SourceEndpointARN           *string      `json:"sourceEndpointARN,omitempty"`
+	SupplementalSettings        *string      `json:"supplementalSettings,omitempty"`
+	TableMappings               *string      `json:"tableMappings,omitempty"`
+	TargetEndpointARN           *string      `json:"targetEndpointARN,omitempty"`
+}
+
+// Provides information that defines a replication instance.
+type ReplicationInstance struct {
+	AvailabilityZone                    *string      `json:"availabilityZone,omitempty"`
+	DNSNameServers                      *string      `json:"dnsNameServers,omitempty"`
+	EngineVersion                       *string      `json:"engineVersion,omitempty"`
+	FreeUntil                           *metav1.Time `json:"freeUntil,omitempty"`
+	InstanceCreateTime                  *metav1.Time `json:"instanceCreateTime,omitempty"`
+	KMSKeyID                            *string      `json:"kmsKeyID,omitempty"`
+	NetworkType                         *string      `json:"networkType,omitempty"`
+	PreferredMaintenanceWindow          *string      `json:"preferredMaintenanceWindow,omitempty"`
+	ReplicationInstanceARN              *string      `json:"replicationInstanceARN,omitempty"`
+	ReplicationInstanceIdentifier       *string      `json:"replicationInstanceIdentifier,omitempty"`
+	ReplicationInstancePrivateIPAddress *string      `json:"replicationInstancePrivateIPAddress,omitempty"`
+	ReplicationInstancePublicIPAddress  *string      `json:"replicationInstancePublicIPAddress,omitempty"`
+	ReplicationInstanceStatus           *string      `json:"replicationInstanceStatus,omitempty"`
+	SecondaryAvailabilityZone           *string      `json:"secondaryAvailabilityZone,omitempty"`
+}
+
+// Contains metadata for a replication instance task log.
+type ReplicationInstanceTaskLog struct {
+	ReplicationTaskARN  *string `json:"replicationTaskARN,omitempty"`
+	ReplicationTaskName *string `json:"replicationTaskName,omitempty"`
+}
+
+// Provides information about the values of pending modifications to a replication
+// instance. This data type is an object of the ReplicationInstance (https://docs.aws.amazon.com/dms/latest/APIReference/API_ReplicationInstance.html)
+// user-defined data type.
+type ReplicationPendingModifiedValues struct {
+	AllocatedStorage *int64  `json:"allocatedStorage,omitempty"`
+	EngineVersion    *string `json:"engineVersion,omitempty"`
+	NetworkType      *string `json:"networkType,omitempty"`
+}
+
+// This object provides a collection of statistics about a serverless replication.
+type ReplicationStats struct {
+	FreshStartDate     *metav1.Time `json:"freshStartDate,omitempty"`
+	FullLoadFinishDate *metav1.Time `json:"fullLoadFinishDate,omitempty"`
+	FullLoadStartDate  *metav1.Time `json:"fullLoadStartDate,omitempty"`
+	StartDate          *metav1.Time `json:"startDate,omitempty"`
+	StopDate           *metav1.Time `json:"stopDate,omitempty"`
+}
+
+// Describes a subnet group in response to a request by the DescribeReplicationSubnetGroups
+// operation.
+type ReplicationSubnetGroup struct {
+	ReplicationSubnetGroupDescription *string `json:"replicationSubnetGroupDescription,omitempty"`
+	ReplicationSubnetGroupIdentifier  *string `json:"replicationSubnetGroupIdentifier,omitempty"`
+	SubnetGroupStatus                 *string `json:"subnetGroupStatus,omitempty"`
+	VPCID                             *string `json:"vpcID,omitempty"`
+}
+
+// Provides information that describes a replication task created by the CreateReplicationTask
+// operation.
+type ReplicationTask struct {
+	CdcStartPosition             *string      `json:"cdcStartPosition,omitempty"`
+	CdcStopPosition              *string      `json:"cdcStopPosition,omitempty"`
+	LastFailureMessage           *string      `json:"lastFailureMessage,omitempty"`
+	RecoveryCheckpoint           *string      `json:"recoveryCheckpoint,omitempty"`
+	ReplicationInstanceARN       *string      `json:"replicationInstanceARN,omitempty"`
+	ReplicationTaskARN           *string      `json:"replicationTaskARN,omitempty"`
+	ReplicationTaskCreationDate  *metav1.Time `json:"replicationTaskCreationDate,omitempty"`
+	ReplicationTaskIdentifier    *string      `json:"replicationTaskIdentifier,omitempty"`
+	ReplicationTaskSettings      *string      `json:"replicationTaskSettings,omitempty"`
+	ReplicationTaskStartDate     *metav1.Time `json:"replicationTaskStartDate,omitempty"`
+	SourceEndpointARN            *string      `json:"sourceEndpointARN,omitempty"`
+	Status                       *string      `json:"status,omitempty"`
+	StopReason                   *string      `json:"stopReason,omitempty"`
+	TableMappings                *string      `json:"tableMappings,omitempty"`
+	TargetEndpointARN            *string      `json:"targetEndpointARN,omitempty"`
+	TargetReplicationInstanceARN *string      `json:"targetReplicationInstanceARN,omitempty"`
+	TaskData                     *string      `json:"taskData,omitempty"`
+}
+
+// The task assessment report in JSON format.
+type ReplicationTaskAssessmentResult struct {
+	AssessmentResults                 *string      `json:"assessmentResults,omitempty"`
+	AssessmentResultsFile             *string      `json:"assessmentResultsFile,omitempty"`
+	AssessmentStatus                  *string      `json:"assessmentStatus,omitempty"`
+	ReplicationTaskARN                *string      `json:"replicationTaskARN,omitempty"`
+	ReplicationTaskIdentifier         *string      `json:"replicationTaskIdentifier,omitempty"`
+	ReplicationTaskLastAssessmentDate *metav1.Time `json:"replicationTaskLastAssessmentDate,omitempty"`
+	S3ObjectURL                       *string      `json:"s3ObjectURL,omitempty"`
+}
+
+// Provides information that describes a premigration assessment run that you
+// have started using the StartReplicationTaskAssessmentRun operation.
+//
+// Some of the information appears based on other operations that can return
+// the ReplicationTaskAssessmentRun object.
+type ReplicationTaskAssessmentRun struct {
+	AssessmentRunName                        *string      `json:"assessmentRunName,omitempty"`
+	LastFailureMessage                       *string      `json:"lastFailureMessage,omitempty"`
+	ReplicationTaskARN                       *string      `json:"replicationTaskARN,omitempty"`
+	ReplicationTaskAssessmentRunARN          *string      `json:"replicationTaskAssessmentRunARN,omitempty"`
+	ReplicationTaskAssessmentRunCreationDate *metav1.Time `json:"replicationTaskAssessmentRunCreationDate,omitempty"`
+	ResultEncryptionMode                     *string      `json:"resultEncryptionMode,omitempty"`
+	ResultKMSKeyARN                          *string      `json:"resultKMSKeyARN,omitempty"`
+	ResultLocationBucket                     *string      `json:"resultLocationBucket,omitempty"`
+	ResultLocationFolder                     *string      `json:"resultLocationFolder,omitempty"`
+	ServiceAccessRoleARN                     *string      `json:"serviceAccessRoleARN,omitempty"`
+	Status                                   *string      `json:"status,omitempty"`
+}
+
+// Provides information that describes an individual assessment from a premigration
+// assessment run.
+type ReplicationTaskIndividualAssessment struct {
+	IndividualAssessmentName                     *string      `json:"individualAssessmentName,omitempty"`
+	ReplicationTaskAssessmentRunARN              *string      `json:"replicationTaskAssessmentRunARN,omitempty"`
+	ReplicationTaskIndividualAssessmentARN       *string      `json:"replicationTaskIndividualAssessmentARN,omitempty"`
+	ReplicationTaskIndividualAssessmentStartDate *metav1.Time `json:"replicationTaskIndividualAssessmentStartDate,omitempty"`
+	Status                                       *string      `json:"status,omitempty"`
+}
+
+// In response to a request by the DescribeReplicationTasks operation, this
+// object provides a collection of statistics about a replication task.
+type ReplicationTaskStats struct {
+	FreshStartDate     *metav1.Time `json:"freshStartDate,omitempty"`
+	FullLoadFinishDate *metav1.Time `json:"fullLoadFinishDate,omitempty"`
+	FullLoadStartDate  *metav1.Time `json:"fullLoadStartDate,omitempty"`
+	StartDate          *metav1.Time `json:"startDate,omitempty"`
+	StopDate           *metav1.Time `json:"stopDate,omitempty"`
+}
+
+// Identifies an DMS resource and any pending actions for it.
+type ResourcePendingMaintenanceActions struct {
+	ResourceIdentifier *string `json:"resourceIdentifier,omitempty"`
+}
+
+// Settings for exporting data to Amazon S3.
+type S3Settings struct {
+	BucketFolder                 *string `json:"bucketFolder,omitempty"`
+	BucketName                   *string `json:"bucketName,omitempty"`
+	CdcMaxBatchInterval          *int64  `json:"cdcMaxBatchInterval,omitempty"`
+	CdcMinFileSize               *int64  `json:"cdcMinFileSize,omitempty"`
+	CdcPath                      *string `json:"cdcPath,omitempty"`
+	CsvDelimiter                 *string `json:"csvDelimiter,omitempty"`
+	CsvNoSupValue                *string `json:"csvNoSupValue,omitempty"`
+	CsvNullValue                 *string `json:"csvNullValue,omitempty"`
+	CsvRowDelimiter              *string `json:"csvRowDelimiter,omitempty"`
+	DataPageSize                 *int64  `json:"dataPageSize,omitempty"`
+	DatePartitionTimezone        *string `json:"datePartitionTimezone,omitempty"`
+	DictPageSizeLimit            *int64  `json:"dictPageSizeLimit,omitempty"`
+	ExpectedBucketOwner          *string `json:"expectedBucketOwner,omitempty"`
+	ExternalTableDefinition      *string `json:"externalTableDefinition,omitempty"`
+	IgnoreHeaderRows             *int64  `json:"ignoreHeaderRows,omitempty"`
+	MaxFileSize                  *int64  `json:"maxFileSize,omitempty"`
+	RowGroupLength               *int64  `json:"rowGroupLength,omitempty"`
+	ServerSideEncryptionKMSKeyID *string `json:"serverSideEncryptionKMSKeyID,omitempty"`
+	ServiceAccessRoleARN         *string `json:"serviceAccessRoleARN,omitempty"`
+	TimestampColumnName          *string `json:"timestampColumnName,omitempty"`
+}
+
+// Provides information that defines a schema conversion application.
+type SCApplicationAttributes struct {
+	S3BucketPath    *string `json:"s3BucketPath,omitempty"`
+	S3BucketRoleARN *string `json:"s3BucketRoleARN,omitempty"`
+}
+
+// Provides information about a schema conversion action.
+type SchemaConversionRequest struct {
+	MigrationProjectARN *string `json:"migrationProjectARN,omitempty"`
+	RequestIdentifier   *string `json:"requestIdentifier,omitempty"`
+	Status              *string `json:"status,omitempty"`
+}
+
+// Describes a schema in a Fleet Advisor collector inventory.
+type SchemaResponse struct {
+	Complexity *string `json:"complexity,omitempty"`
+	SchemaID   *string `json:"schemaID,omitempty"`
+	SchemaName *string `json:"schemaName,omitempty"`
+}
+
+// Describes a schema in a Fleet Advisor collector inventory.
+type SchemaShortInfoResponse struct {
+	DatabaseID        *string `json:"databaseID,omitempty"`
+	DatabaseIPAddress *string `json:"databaseIPAddress,omitempty"`
+	DatabaseName      *string `json:"databaseName,omitempty"`
+	SchemaID          *string `json:"schemaID,omitempty"`
+	SchemaName        *string `json:"schemaName,omitempty"`
+}
+
+// Describes a server in a Fleet Advisor collector inventory.
+type ServerShortInfoResponse struct {
+	IPAddress  *string `json:"ipAddress,omitempty"`
+	ServerID   *string `json:"serverID,omitempty"`
+	ServerName *string `json:"serverName,omitempty"`
+}
+
+// Defines settings for a source data provider for a data migration.
+type SourceDataSetting struct {
+	CDCStartPosition *string `json:"cDCStartPosition,omitempty"`
+	SlotName         *string `json:"slotName,omitempty"`
+}
+
+// Provides information about the source database to analyze and provide target
+// recommendations according to the specified requirements.
+type StartRecommendationsRequestEntry struct {
+	DatabaseID *string `json:"databaseID,omitempty"`
+}
+
+// The properties of the statement for metadata model creation.
+type StatementProperties struct {
+	Definition *string `json:"definition,omitempty"`
+}
+
+// In response to a request by the DescribeReplicationSubnetGroups operation,
+// this object identifies a subnet by its given Availability Zone, subnet identifier,
+// and status.
+type Subnet struct {
+	SubnetIdentifier *string `json:"subnetIdentifier,omitempty"`
+	SubnetStatus     *string `json:"subnetStatus,omitempty"`
+}
+
+// Provides information about types of supported endpoints in response to a
+// request by the DescribeEndpointTypes operation. This information includes
+// the type of endpoint, the database engine name, and whether change data capture
+// (CDC) is supported.
+type SupportedEndpointType struct {
+	EngineDisplayName                       *string `json:"engineDisplayName,omitempty"`
+	EngineName                              *string `json:"engineName,omitempty"`
+	ReplicationInstanceEngineMinimumVersion *string `json:"replicationInstanceEngineMinimumVersion,omitempty"`
+}
+
+// Provides information that defines an SAP ASE data provider.
+type SybaseAseDataProviderSettings struct {
+	CertificateARN *string `json:"certificateARN,omitempty"`
+	DatabaseName   *string `json:"databaseName,omitempty"`
+	Port           *int64  `json:"port,omitempty"`
+	ServerName     *string `json:"serverName,omitempty"`
+}
+
+// Provides information that defines a SAP ASE endpoint.
+type SybaseSettings struct {
+	DatabaseName                *string `json:"databaseName,omitempty"`
+	Password                    *string `json:"password,omitempty"`
+	Port                        *int64  `json:"port,omitempty"`
+	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
+	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
+	ServerName                  *string `json:"serverName,omitempty"`
+	Username                    *string `json:"username,omitempty"`
+}
+
+// Provides a collection of table statistics in response to a request by the
+// DescribeTableStatistics operation.
+type TableStatistics struct {
+	FullLoadEndTime        *metav1.Time `json:"fullLoadEndTime,omitempty"`
+	FullLoadStartTime      *metav1.Time `json:"fullLoadStartTime,omitempty"`
+	LastUpdateTime         *metav1.Time `json:"lastUpdateTime,omitempty"`
+	ResyncState            *string      `json:"resyncState,omitempty"`
+	SchemaName             *string      `json:"schemaName,omitempty"`
+	TableName              *string      `json:"tableName,omitempty"`
+	TableState             *string      `json:"tableState,omitempty"`
+	ValidationState        *string      `json:"validationState,omitempty"`
+	ValidationStateDetails *string      `json:"validationStateDetails,omitempty"`
+}
+
+// Provides the name of the schema and table to be reloaded.
+type TableToReload struct {
+	SchemaName *string `json:"schemaName,omitempty"`
+	TableName  *string `json:"tableName,omitempty"`
+}
+
+// A user-defined key-value pair that describes metadata added to an DMS resource
+// and that is used by operations such as the following:
+//
+//   - AddTagsToResource
+//
+//   - ListTagsForResource
+//
+//   - RemoveTagsFromResource
+type Tag struct {
+	Key   *string `json:"key,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+// Provides information that defines an Amazon Timestream endpoint.
+type TimestreamSettings struct {
+	DatabaseName     *string `json:"databaseName,omitempty"`
+	MagneticDuration *int64  `json:"magneticDuration,omitempty"`
+	MemoryDuration   *int64  `json:"memoryDuration,omitempty"`
+}
+
+// Describes the status of a security group associated with the virtual private
+// cloud (VPC) hosting your replication and DB instances.
+type VPCSecurityGroupMembership struct {
+	Status             *string `json:"status,omitempty"`
+	VPCSecurityGroupID *string `json:"vpcSecurityGroupID,omitempty"`
+}

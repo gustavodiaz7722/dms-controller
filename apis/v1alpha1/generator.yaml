@@ -1,18 +1,72 @@
+ignore:
+  field_paths:
+    # We ignore CertificateWallet and provide a custom field in the Spec
+    - ImportCertificateInput.CertificateWallet
+    # We ignore this field as it becomes part of the Spec.Tags
+    # It is not used in our tagging logic and could result in confusing
+    # mutations of other resources.
+    - Tag.ResourceArn
+  resource_names:
+#    - Certificate
+    - DataMigration
+    - DataProvider
+    - Endpoint
+    - EventSubscription
+    - FleetAdvisorCollector
+    - InstanceProfile
+    - MigrationProject
+    - ReplicationConfig
+    - ReplicationInstance
+    - ReplicationSubnetGroup
+    - ReplicationTask
+operations:
+  ImportCertificate:
+    resource_name: Certificate
+    operation_type: CREATE
+resources:
+  Certificate:
+    exceptions:
+      errors:
+        404:
+          code: ResourceNotFoundFault
+    fields:
+      CertificatePem:
+        is_secret: true
+      # We ignore this field from ImportCertificateInput and replace it with a
+      # custom field in the Spec because []byte fields in combination with
+      # is_secret are not properly handled by ACK code generator which causes
+      # type casting errors in newCreateRequestPayload()
+      CertificateWallet:
+        is_secret: true
+        type: "*string"
+      KMSKeyID:
+        is_immutable: true
+        references:
+          resource: Key
+          service_name: kms
+          path: Status.KeyID
+      Name:
+        is_primary_key: true
+        is_immutable: true
+    hooks:
+      sdk_create_post_build_request:
+        template_path: hooks/certificate/sdk_create_post_build_request.go.tpl
+      sdk_read_many_post_build_request:
+        template_path: hooks/certificate/sdk_read_many_post_build_request.go.tpl
+      sdk_read_many_post_set_output:
+        template_path: hooks/certificate/sdk_read_many_post_set_output.go.tpl
+    print:
+      add_age_column: true
+      add_synced_column: true
+    renames:
+      operations:
+        ImportCertificate:
+          input_fields:
+            CertificateIdentifier: Name
+    # DMS does not provide a ModifyCertificate API, so we have to use a custom
+    # method to update Tags.
+    update_operation:
+      custom_method_name: customSdkUpdate
 sdk_names:
   model_name: database-migration-service
   package_name: databasemigrationservice
-  
-ignore:
-  resource_names:
-      - DataMigration
-      - DataProvider
-      - Endpoint
-      - EventSubscription
-      - FleetAdvisorCollector
-      - InstanceProfile
-      - MigrationProject
-      - ReplicationConfig
-      - ReplicationInstance
-      - ReplicationSubnetGroup
-      - ReplicationTask
-

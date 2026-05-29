@@ -1,0 +1,18 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Statement1",
+      "Effect": "Allow",
+      "Action": [
+        "dms:AddTagsToResource",
+        "dms:DeleteCertificate",
+        "dms:DescribeCertificates",
+        "dms:ImportCertificate",
+        "dms:ListTagsForResource",
+        "dms:RemoveTagsFromResource"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

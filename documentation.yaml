@@ -1,0 +1,6 @@
+resources:
+  Certificate:
+    fields:
+      CertificateWallet:
+        override: |-
+          A Base64 encoded Oracle Wallet certificate (cwallet.sso) for use with SSL.
