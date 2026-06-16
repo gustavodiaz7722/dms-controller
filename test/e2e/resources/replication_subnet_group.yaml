@@ -1,0 +1,13 @@
+apiVersion: dms.services.k8s.aws/v1alpha1
+kind: ReplicationSubnetGroup
+metadata:
+  name: $REPLICATION_SUBNET_GROUP_NAME
+spec:
+  name: $REPLICATION_SUBNET_GROUP_NAME
+  description: $REPLICATION_SUBNET_GROUP_DESC
+  subnetIDs:
+    - $PUBLIC_SUBNET_1
+    - $PUBLIC_SUBNET_2
+  tags:
+    - key: environment
+      value: dev

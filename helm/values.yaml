@@ -152,6 +152,7 @@ reconcile:
   resources:
     - Certificate
     - Endpoint
+    - ReplicationSubnetGroup
 
 serviceAccount:
   # Specifies whether a service account should be created

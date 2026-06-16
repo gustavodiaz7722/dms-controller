@@ -18,6 +18,7 @@ rules:
   resources:
   - certificates
   - endpoints
+  - replicationsubnetgroups
   verbs:
   - create
   - delete
@@ -31,6 +32,7 @@ rules:
   resources:
   - certificates
   - endpoints
+  - replicationsubnetgroups
   verbs:
   - get
   - patch

@@ -19,6 +19,7 @@ import (
 	"context"
 	"os"
 
+	ec2apitypes "github.com/aws-controllers-k8s/ec2-controller/apis/v1alpha1"
 	iamapitypes "github.com/aws-controllers-k8s/iam-controller/apis/v1alpha1"
 	kinesisapitypes "github.com/aws-controllers-k8s/kinesis-controller/apis/v1alpha1"
 	kmsapitypes "github.com/aws-controllers-k8s/kms-controller/apis/v1alpha1"
@@ -46,6 +47,7 @@ import (
 
 	_ "github.com/aws-controllers-k8s/dms-controller/pkg/resource/certificate"
 	_ "github.com/aws-controllers-k8s/dms-controller/pkg/resource/endpoint"
+	_ "github.com/aws-controllers-k8s/dms-controller/pkg/resource/replication_subnet_group"
 
 	"github.com/aws-controllers-k8s/dms-controller/pkg/version"
 )
@@ -62,6 +64,7 @@ func init() {
 
 	_ = svctypes.AddToScheme(scheme)
 	_ = ackv1alpha1.AddToScheme(scheme)
+	_ = ec2apitypes.AddToScheme(scheme)
 	_ = iamapitypes.AddToScheme(scheme)
 	_ = kinesisapitypes.AddToScheme(scheme)
 	_ = kmsapitypes.AddToScheme(scheme)

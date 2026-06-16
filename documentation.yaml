@@ -18,3 +18,9 @@ resources:
         prepend: |-
           Reference to an ACK managed IAM role resource that you want to use as the
           service access role to creates the endpoint.
+  ReplicationSubnetGroup:
+    fields:
+      SubnetRefs:
+        prepend: |-
+          Two or more references to ACK managed EC2 subnet resources to be assigned to
+          the subnet group.

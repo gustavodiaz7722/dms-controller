@@ -17,7 +17,7 @@ ignore:
     - MigrationProject
     - ReplicationConfig
     - ReplicationInstance
-    - ReplicationSubnetGroup
+#    - ReplicationSubnetGroup
     - ReplicationTask
 operations:
   ImportCertificate:
@@ -373,6 +373,50 @@ resources:
         ModifyEndpoint:
           output_fields:
             Status: EndpointStatus
+  ReplicationSubnetGroup:
+    exceptions:
+      errors:
+        404:
+          code: ResourceNotFoundFault
+    fields:
+      Name:
+        is_primary_key: true
+        is_immutable: true
+      SubnetGroupStatus:
+        print:
+          name: Status
+      SubnetIDs:
+        references:
+          service_name: ec2
+          resource: Subnet
+          path: Status.SubnetID
+    hooks:
+      sdk_read_many_post_build_request:
+        template_path: hooks/replication_subnet_group/sdk_read_many_post_build_request.go.tpl
+      sdk_read_many_post_set_output:
+        template_path: hooks/replication_subnet_group/sdk_read_many_post_set_output.go.tpl
+      sdk_update_pre_build_request:
+        template_path: hooks/replication_subnet_group/sdk_update_pre_build_request.go.tpl
+    print:
+      add_age_column: true
+      add_synced_column: true
+    renames:
+      operations:
+        CreateReplicationSubnetGroup:
+          input_fields:
+            ReplicationSubnetGroupDescription: Description
+            ReplicationSubnetGroupIdentifier: Name
+        DeleteReplicationSubnetGroup:
+          input_fields:
+            ReplicationSubnetGroupIdentifier: Name
+        DescribeReplicationSubnetGroups:
+          input_fields:
+            ReplicationSubnetGroupDescription: Description
+            ReplicationSubnetGroupIdentifier: Name
+        ModifyReplicationSubnetGroup:
+          input_fields:
+            ReplicationSubnetGroupDescription: Description
+            ReplicationSubnetGroupIdentifier: Name
 sdk_names:
   model_name: database-migration-service
   package_name: databasemigrationservice

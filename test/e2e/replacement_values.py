@@ -19,6 +19,10 @@ from e2e.bootstrap_resources import get_bootstrap_resources
 BOOTSTRAP_RESOURCES = get_bootstrap_resources()
 
 REPLACEMENT_VALUES = {
+    "PUBLIC_SUBNET_1": BOOTSTRAP_RESOURCES.TestVPC.public_subnets.subnet_ids[0],
+    "PUBLIC_SUBNET_2": BOOTSTRAP_RESOURCES.TestVPC.public_subnets.subnet_ids[1],
+    # Security group that belongs to the bootstrap VPC; used by ReplicationInstance tests.
+    "SECURITY_GROUP_ID": BOOTSTRAP_RESOURCES.TestVPC.security_group.group_id,
     # S3 bucket and IAM role used by Endpoint (S3 target) tests.
     "S3_BUCKET_NAME": BOOTSTRAP_RESOURCES.TestBucket.name,
     # The test bucket is bootstrapped in the current AWS account.

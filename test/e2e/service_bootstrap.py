@@ -19,6 +19,7 @@ import logging
 from acktest.bootstrapping import Resources, BootstrapFailureException
 from acktest.bootstrapping.iam import Role, UserPolicies
 from acktest.bootstrapping.s3 import Bucket
+from acktest.bootstrapping.vpc import VPC
 
 from e2e import bootstrap_directory
 from e2e.bootstrap_resources import BootstrapResources
@@ -73,6 +74,7 @@ def service_bootstrap() -> Resources:
     resources = BootstrapResources(
         TestBucket=test_bucket,
         TestEndpointRole=test_endpoint_role,
+        TestVPC=VPC(name_prefix="ack-test-vpc", num_public_subnet=2, num_private_subnet=2),
     )
 
     try:

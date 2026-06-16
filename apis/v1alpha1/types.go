@@ -96,14 +96,15 @@ type CollectorShortInfoResponse struct {
 
 // Configuration parameters for provisioning an DMS Serverless replication.
 type ComputeConfig struct {
-	AvailabilityZone           *string `json:"availabilityZone,omitempty"`
-	DNSNameServers             *string `json:"dnsNameServers,omitempty"`
-	KMSKeyID                   *string `json:"kmsKeyID,omitempty"`
-	MaxCapacityUnits           *int64  `json:"maxCapacityUnits,omitempty"`
-	MinCapacityUnits           *int64  `json:"minCapacityUnits,omitempty"`
-	MultiAZ                    *bool   `json:"multiAZ,omitempty"`
-	PreferredMaintenanceWindow *string `json:"preferredMaintenanceWindow,omitempty"`
-	ReplicationSubnetGroupID   *string `json:"replicationSubnetGroupID,omitempty"`
+	AvailabilityZone           *string   `json:"availabilityZone,omitempty"`
+	DNSNameServers             *string   `json:"dnsNameServers,omitempty"`
+	KMSKeyID                   *string   `json:"kmsKeyID,omitempty"`
+	MaxCapacityUnits           *int64    `json:"maxCapacityUnits,omitempty"`
+	MinCapacityUnits           *int64    `json:"minCapacityUnits,omitempty"`
+	MultiAZ                    *bool     `json:"multiAZ,omitempty"`
+	PreferredMaintenanceWindow *string   `json:"preferredMaintenanceWindow,omitempty"`
+	ReplicationSubnetGroupID   *string   `json:"replicationSubnetGroupID,omitempty"`
+	VPCSecurityGroupIDs        []*string `json:"vpcSecurityGroupIDs,omitempty"`
 }
 
 // Status of the connection between an endpoint and a replication instance,
@@ -488,14 +489,15 @@ type IbmDB2ZOsDataProviderSettings struct {
 
 // Provides information that defines an instance profile.
 type InstanceProfile struct {
-	AvailabilityZone      *string `json:"availabilityZone,omitempty"`
-	Description           *string `json:"description,omitempty"`
-	InstanceProfileARN    *string `json:"instanceProfileARN,omitempty"`
-	InstanceProfileName   *string `json:"instanceProfileName,omitempty"`
-	KMSKeyARN             *string `json:"kmsKeyARN,omitempty"`
-	NetworkType           *string `json:"networkType,omitempty"`
-	PubliclyAccessible    *bool   `json:"publiclyAccessible,omitempty"`
-	SubnetGroupIdentifier *string `json:"subnetGroupIdentifier,omitempty"`
+	AvailabilityZone      *string   `json:"availabilityZone,omitempty"`
+	Description           *string   `json:"description,omitempty"`
+	InstanceProfileARN    *string   `json:"instanceProfileARN,omitempty"`
+	InstanceProfileName   *string   `json:"instanceProfileName,omitempty"`
+	KMSKeyARN             *string   `json:"kmsKeyARN,omitempty"`
+	NetworkType           *string   `json:"networkType,omitempty"`
+	PubliclyAccessible    *bool     `json:"publiclyAccessible,omitempty"`
+	SubnetGroupIdentifier *string   `json:"subnetGroupIdentifier,omitempty"`
+	VPCSecurityGroups     []*string `json:"vpcSecurityGroups,omitempty"`
 }
 
 // Describes a Fleet Advisor collector inventory.
@@ -1047,6 +1049,7 @@ type Replication struct {
 	CdcStartPosition            *string      `json:"cdcStartPosition,omitempty"`
 	CdcStartTime                *metav1.Time `json:"cdcStartTime,omitempty"`
 	CdcStopPosition             *string      `json:"cdcStopPosition,omitempty"`
+	FailureMessages             []*string    `json:"failureMessages,omitempty"`
 	IsReadOnly                  *bool        `json:"isReadOnly,omitempty"`
 	RecoveryCheckpoint          *string      `json:"recoveryCheckpoint,omitempty"`
 	ReplicationConfigARN        *string      `json:"replicationConfigARN,omitempty"`
@@ -1092,7 +1095,10 @@ type ReplicationInstance struct {
 	ReplicationInstancePrivateIPAddress *string      `json:"replicationInstancePrivateIPAddress,omitempty"`
 	ReplicationInstancePublicIPAddress  *string      `json:"replicationInstancePublicIPAddress,omitempty"`
 	ReplicationInstanceStatus           *string      `json:"replicationInstanceStatus,omitempty"`
-	SecondaryAvailabilityZone           *string      `json:"secondaryAvailabilityZone,omitempty"`
+	// Describes a subnet group in response to a request by the DescribeReplicationSubnetGroups
+	// operation.
+	ReplicationSubnetGroup    *ReplicationSubnetGroup_SDK `json:"replicationSubnetGroup,omitempty"`
+	SecondaryAvailabilityZone *string                     `json:"secondaryAvailabilityZone,omitempty"`
 }
 
 // Contains metadata for a replication instance task log.
@@ -1127,12 +1133,14 @@ type ReplicationStats struct {
 
 // Describes a subnet group in response to a request by the DescribeReplicationSubnetGroups
 // operation.
-type ReplicationSubnetGroup struct {
-	IsReadOnly                        *bool   `json:"isReadOnly,omitempty"`
-	ReplicationSubnetGroupDescription *string `json:"replicationSubnetGroupDescription,omitempty"`
-	ReplicationSubnetGroupIdentifier  *string `json:"replicationSubnetGroupIdentifier,omitempty"`
-	SubnetGroupStatus                 *string `json:"subnetGroupStatus,omitempty"`
-	VPCID                             *string `json:"vpcID,omitempty"`
+type ReplicationSubnetGroup_SDK struct {
+	IsReadOnly                        *bool     `json:"isReadOnly,omitempty"`
+	ReplicationSubnetGroupDescription *string   `json:"replicationSubnetGroupDescription,omitempty"`
+	ReplicationSubnetGroupIdentifier  *string   `json:"replicationSubnetGroupIdentifier,omitempty"`
+	SubnetGroupStatus                 *string   `json:"subnetGroupStatus,omitempty"`
+	Subnets                           []*Subnet `json:"subnets,omitempty"`
+	SupportedNetworkTypes             []*string `json:"supportedNetworkTypes,omitempty"`
+	VPCID                             *string   `json:"vpcID,omitempty"`
 }
 
 // Provides information that describes a replication task created by the CreateReplicationTask
@@ -1341,8 +1349,14 @@ type StatementProperties struct {
 // this object identifies a subnet by its given Availability Zone, subnet identifier,
 // and status.
 type Subnet struct {
-	SubnetIdentifier *string `json:"subnetIdentifier,omitempty"`
-	SubnetStatus     *string `json:"subnetStatus,omitempty"`
+	// The name of an Availability Zone for use during database migration. AvailabilityZone
+	// is an optional parameter to the CreateReplicationInstance (https://docs.aws.amazon.com/dms/latest/APIReference/API_CreateReplicationInstance.html)
+	// operation, and it’s value relates to the Amazon Web Services Region of
+	// an endpoint. For example, the availability zone of an endpoint in the us-east-1
+	// region might be us-east-1a, us-east-1b, us-east-1c, or us-east-1d.
+	SubnetAvailabilityZone *AvailabilityZone `json:"subnetAvailabilityZone,omitempty"`
+	SubnetIdentifier       *string           `json:"subnetIdentifier,omitempty"`
+	SubnetStatus           *string           `json:"subnetStatus,omitempty"`
 }
 
 // Provides information about types of supported endpoints in response to a

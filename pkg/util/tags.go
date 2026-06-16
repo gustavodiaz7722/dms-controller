@@ -47,16 +47,6 @@ mainLoop:
 	return addedOrUpdated, removed
 }
 
-// EqualTags returns true if two Tag arrays are equal regardless of the order
-// of their elements.
-func EqualTags(
-	a []*svcapitypes.Tag,
-	b []*svcapitypes.Tag,
-) bool {
-	addedOrUpdated, removed := ComputeTagsDelta(a, b)
-	return len(addedOrUpdated) == 0 && len(removed) == 0
-}
-
 func equalStrings(a, b *string) bool {
 	if a == nil {
 		return b == nil || *b == ""
