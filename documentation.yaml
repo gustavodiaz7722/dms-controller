@@ -4,3 +4,17 @@ resources:
       CertificateWallet:
         override: |-
           A Base64 encoded Oracle Wallet certificate (cwallet.sso) for use with SSL.
+  Endpoint:
+    fields:
+      CertificateRef:
+        prepend: |-
+          Reference to an ACK managed ACM certificate resource to associate with this
+          endpoint.
+      KmsKeyRef:
+        prepend: |-
+          Reference to an ACK managed KMS key that is used to encrypt the connection
+          parameters for the endpoint.
+      ServiceAccessRoleRef:
+        prepend: |-
+          Reference to an ACK managed IAM role resource that you want to use as the
+          service access role to creates the endpoint.

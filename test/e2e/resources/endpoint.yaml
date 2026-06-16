@@ -1,0 +1,13 @@
+apiVersion: dms.services.k8s.aws/v1alpha1
+kind: Endpoint
+metadata:
+  name: $ENDPOINT_NAME
+spec:
+  name: $ENDPOINT_NAME
+  endpointType: $ENDPOINT_TYPE
+  engineName: s3
+  s3Settings:
+    bucketFolder: $ENDPOINT_BUCKET_FOLDER
+    bucketName: $S3_BUCKET_NAME
+    expectedBucketOwner: "$S3_BUCKET_OWNER"
+    serviceAccessRoleARN: $DMS_S3_ROLE_ARN

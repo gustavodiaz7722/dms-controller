@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - common
   - bases/dms.services.k8s.aws_certificates.yaml
+  - bases/dms.services.k8s.aws_endpoints.yaml

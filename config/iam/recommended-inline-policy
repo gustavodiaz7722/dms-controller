@@ -6,10 +6,15 @@
       "Effect": "Allow",
       "Action": [
         "dms:AddTagsToResource",
+        "dms:CreateEndpoint",
         "dms:DeleteCertificate",
+        "dms:DeleteEndpoint",
         "dms:DescribeCertificates",
+        "dms:DescribeEndpoints",
+        "dms:DescribeReplicationTasks",
         "dms:ImportCertificate",
         "dms:ListTagsForResource",
+        "dms:ModifyEndpoint",
         "dms:RemoveTagsFromResource"
       ],
       "Resource": "*"

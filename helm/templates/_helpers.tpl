@@ -73,6 +73,7 @@ rules:
   - dms.services.k8s.aws
   resources:
   - certificates
+  - endpoints
   verbs:
   - create
   - delete
@@ -85,15 +86,48 @@ rules:
   - dms.services.k8s.aws
   resources:
   - certificates/status
+  - endpoints/status
   verbs:
   - get
   - patch
   - update
 - apiGroups:
+  - iam.services.k8s.aws
+  resources:
+  - roles
+  - roles/status
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - kinesis.services.k8s.aws
+  resources:
+  - streams
+  - streams/status
+  verbs:
+  - get
+  - list
+- apiGroups:
   - kms.services.k8s.aws
   resources:
   - keys
   - keys/status
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - s3.services.k8s.aws
+  resources:
+  - buckets
+  - buckets/status
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - secretsmanager.services.k8s.aws
+  resources:
+  - secrets
+  - secrets/status
   verbs:
   - get
   - list

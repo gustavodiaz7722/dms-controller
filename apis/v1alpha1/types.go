@@ -67,6 +67,13 @@ type Certificate_SDK struct {
 	ValidToDate             *metav1.Time `json:"validToDate,omitempty"`
 }
 
+// Describes the last Fleet Advisor collector health check.
+type CollectorHealthCheck struct {
+	LocalCollectorS3Access             *bool `json:"localCollectorS3Access,omitempty"`
+	WebCollectorGrantedRoleBasedAccess *bool `json:"webCollectorGrantedRoleBasedAccess,omitempty"`
+	WebCollectorS3Access               *bool `json:"webCollectorS3Access,omitempty"`
+}
+
 // Describes a Fleet Advisor collector.
 type CollectorResponse struct {
 	CollectorName         *string `json:"collectorName,omitempty"`
@@ -94,6 +101,7 @@ type ComputeConfig struct {
 	KMSKeyID                   *string `json:"kmsKeyID,omitempty"`
 	MaxCapacityUnits           *int64  `json:"maxCapacityUnits,omitempty"`
 	MinCapacityUnits           *int64  `json:"minCapacityUnits,omitempty"`
+	MultiAZ                    *bool   `json:"multiAZ,omitempty"`
 	PreferredMaintenanceWindow *string `json:"preferredMaintenanceWindow,omitempty"`
 	ReplicationSubnetGroupID   *string `json:"replicationSubnetGroupID,omitempty"`
 }
@@ -124,8 +132,20 @@ type DataMigration struct {
 // logs, and the selection rules to use to include or exclude database objects
 // from the migration.
 type DataMigrationSettings struct {
-	NumberOfJobs   *int64  `json:"numberOfJobs,omitempty"`
-	SelectionRules *string `json:"selectionRules,omitempty"`
+	CloudwatchLogsEnabled *bool   `json:"cloudwatchLogsEnabled,omitempty"`
+	NumberOfJobs          *int64  `json:"numberOfJobs,omitempty"`
+	SelectionRules        *string `json:"selectionRules,omitempty"`
+}
+
+// Information about the data migration run, including start and stop time,
+// latency, and migration progress.
+type DataMigrationStatistics struct {
+	CDCLatency         *int64 `json:"cDCLatency,omitempty"`
+	FullLoadPercentage *int64 `json:"fullLoadPercentage,omitempty"`
+	TablesErrored      *int64 `json:"tablesErrored,omitempty"`
+	TablesLoaded       *int64 `json:"tablesLoaded,omitempty"`
+	TablesLoading      *int64 `json:"tablesLoading,omitempty"`
+	TablesQueued       *int64 `json:"tablesQueued,omitempty"`
 }
 
 // Provides information that defines a data provider.
@@ -134,6 +154,7 @@ type DataProvider struct {
 	DataProviderName *string `json:"dataProviderName,omitempty"`
 	Description      *string `json:"description,omitempty"`
 	Engine           *string `json:"engine,omitempty"`
+	Virtual          *bool   `json:"virtual,omitempty"`
 }
 
 // Information about a data provider.
@@ -186,6 +207,8 @@ type DefaultErrorDetails struct {
 type DmsTransferSettings struct {
 	BucketName           *string `json:"bucketName,omitempty"`
 	ServiceAccessRoleARN *string `json:"serviceAccessRoleARN,omitempty"`
+	// Reference field for ServiceAccessRoleARN
+	ServiceAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"serviceAccessRoleRef,omitempty"`
 }
 
 // Provides information that defines a DocumentDB data provider.
@@ -194,25 +217,38 @@ type DocDBDataProviderSettings struct {
 	DatabaseName   *string `json:"databaseName,omitempty"`
 	Port           *int64  `json:"port,omitempty"`
 	ServerName     *string `json:"serverName,omitempty"`
+	SSLMode        *string `json:"sslMode,omitempty"`
 }
 
 // Provides information that defines a DocumentDB endpoint.
 type DocDBSettings struct {
-	DatabaseName                *string `json:"databaseName,omitempty"`
-	DocsToInvestigate           *int64  `json:"docsToInvestigate,omitempty"`
-	KMSKeyID                    *string `json:"kmsKeyID,omitempty"`
-	Password                    *string `json:"password,omitempty"`
-	Port                        *int64  `json:"port,omitempty"`
-	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
-	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
-	ServerName                  *string `json:"serverName,omitempty"`
-	Username                    *string `json:"username,omitempty"`
+	DatabaseName      *string `json:"databaseName,omitempty"`
+	DocsToInvestigate *int64  `json:"docsToInvestigate,omitempty"`
+	ExtractDocID      *bool   `json:"extractDocID,omitempty"`
+	KMSKeyID          *string `json:"kmsKeyID,omitempty"`
+	// Reference field for KMSKeyID
+	KMSKeyRef                   *ackv1alpha1.AWSResourceReferenceWrapper `json:"kmsKeyRef,omitempty"`
+	NestingLevel                *string                                  `json:"nestingLevel,omitempty"`
+	Password                    *ackv1alpha1.SecretKeyReference          `json:"password,omitempty"`
+	Port                        *int64                                   `json:"port,omitempty"`
+	ReplicateShardCollections   *bool                                    `json:"replicateShardCollections,omitempty"`
+	SecretsManagerAccessRoleARN *string                                  `json:"secretsManagerAccessRoleARN,omitempty"`
+	// Reference field for SecretsManagerAccessRoleARN
+	SecretsManagerAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerAccessRoleRef,omitempty"`
+	SecretsManagerSecretID      *string                                  `json:"secretsManagerSecretID,omitempty"`
+	// Reference field for SecretsManagerSecretID
+	SecretsManagerSecretRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerSecretRef,omitempty"`
+	ServerName              *string                                  `json:"serverName,omitempty"`
+	UseUpdateLookUp         *bool                                    `json:"useUpdateLookUp,omitempty"`
+	Username                *string                                  `json:"username,omitempty"`
 }
 
 // Provides the Amazon Resource Name (ARN) of the Identity and Access Management
 // (IAM) role used to define an Amazon DynamoDB target endpoint.
 type DynamoDBSettings struct {
 	ServiceAccessRoleARN *string `json:"serviceAccessRoleARN,omitempty"`
+	// Reference field for ServiceAccessRoleARN
+	ServiceAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"serviceAccessRoleRef,omitempty"`
 }
 
 // Provides information that defines an OpenSearch endpoint.
@@ -221,6 +257,20 @@ type ElasticsearchSettings struct {
 	ErrorRetryDuration      *int64  `json:"errorRetryDuration,omitempty"`
 	FullLoadErrorPercentage *int64  `json:"fullLoadErrorPercentage,omitempty"`
 	ServiceAccessRoleARN    *string `json:"serviceAccessRoleARN,omitempty"`
+	// Reference field for ServiceAccessRoleARN
+	ServiceAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"serviceAccessRoleRef,omitempty"`
+	UseNewMappingType    *bool                                    `json:"useNewMappingType,omitempty"`
+}
+
+// Endpoint settings.
+type EndpointSetting struct {
+	Applicability *string `json:"applicability,omitempty"`
+	DefaultValue  *string `json:"defaultValue,omitempty"`
+	IntValueMax   *int64  `json:"intValueMax,omitempty"`
+	IntValueMin   *int64  `json:"intValueMin,omitempty"`
+	Name          *string `json:"name,omitempty"`
+	Sensitive     *bool   `json:"sensitive,omitempty"`
+	Units         *string `json:"units,omitempty"`
 }
 
 // Describes an endpoint of a database instance in response to operations such
@@ -231,32 +281,71 @@ type ElasticsearchSettings struct {
 //   - DescribeEndpoint
 //
 //   - ModifyEndpoint
-type Endpoint struct {
-	CertificateARN            *string `json:"certificateARN,omitempty"`
-	DatabaseName              *string `json:"databaseName,omitempty"`
-	EndpointARN               *string `json:"endpointARN,omitempty"`
-	EndpointIdentifier        *string `json:"endpointIdentifier,omitempty"`
-	EngineDisplayName         *string `json:"engineDisplayName,omitempty"`
-	EngineName                *string `json:"engineName,omitempty"`
-	ExternalID                *string `json:"externalID,omitempty"`
-	ExternalTableDefinition   *string `json:"externalTableDefinition,omitempty"`
-	ExtraConnectionAttributes *string `json:"extraConnectionAttributes,omitempty"`
-	KMSKeyID                  *string `json:"kmsKeyID,omitempty"`
-	Port                      *int64  `json:"port,omitempty"`
-	ServerName                *string `json:"serverName,omitempty"`
-	ServiceAccessRoleARN      *string `json:"serviceAccessRoleARN,omitempty"`
-	Status                    *string `json:"status,omitempty"`
-	Username                  *string `json:"username,omitempty"`
-}
-
-// Endpoint settings.
-type EndpointSetting struct {
-	Applicability *string `json:"applicability,omitempty"`
-	DefaultValue  *string `json:"defaultValue,omitempty"`
-	IntValueMax   *int64  `json:"intValueMax,omitempty"`
-	IntValueMin   *int64  `json:"intValueMin,omitempty"`
-	Name          *string `json:"name,omitempty"`
-	Units         *string `json:"units,omitempty"`
+type Endpoint_SDK struct {
+	CertificateARN *string `json:"certificateARN,omitempty"`
+	DatabaseName   *string `json:"databaseName,omitempty"`
+	// The settings in JSON format for the DMS Transfer type source endpoint.
+	DmsTransferSettings *DmsTransferSettings `json:"dmsTransferSettings,omitempty"`
+	// Provides information that defines a DocumentDB endpoint.
+	DocDBSettings *DocDBSettings `json:"docDBSettings,omitempty"`
+	// Provides the Amazon Resource Name (ARN) of the Identity and Access Management
+	// (IAM) role used to define an Amazon DynamoDB target endpoint.
+	DynamoDBSettings *DynamoDBSettings `json:"dynamoDBSettings,omitempty"`
+	// Provides information that defines an OpenSearch endpoint.
+	ElasticsearchSettings     *ElasticsearchSettings `json:"elasticsearchSettings,omitempty"`
+	EndpointARN               *string                `json:"endpointARN,omitempty"`
+	EndpointIdentifier        *string                `json:"endpointIdentifier,omitempty"`
+	EndpointType              *string                `json:"endpointType,omitempty"`
+	EngineDisplayName         *string                `json:"engineDisplayName,omitempty"`
+	EngineName                *string                `json:"engineName,omitempty"`
+	ExternalID                *string                `json:"externalID,omitempty"`
+	ExternalTableDefinition   *string                `json:"externalTableDefinition,omitempty"`
+	ExtraConnectionAttributes *string                `json:"extraConnectionAttributes,omitempty"`
+	// Settings in JSON format for the source GCP MySQL endpoint.
+	GcpMySQLSettings *GcpMySQLSettings `json:"gcpMySQLSettings,omitempty"`
+	// Provides information that defines an IBM Db2 LUW endpoint.
+	IBMDB2Settings *IBMDB2Settings `json:"iBMDB2Settings,omitempty"`
+	IsReadOnly     *bool           `json:"isReadOnly,omitempty"`
+	// Provides information that describes an Apache Kafka endpoint. This information
+	// includes the output format of records applied to the endpoint and details
+	// of transaction and control table data information.
+	KafkaSettings *KafkaSettings `json:"kafkaSettings,omitempty"`
+	// Provides information that describes an Amazon Kinesis Data Stream endpoint.
+	// This information includes the output format of records applied to the endpoint
+	// and details of transaction and control table data information.
+	KinesisSettings *KinesisSettings `json:"kinesisSettings,omitempty"`
+	KMSKeyID        *string          `json:"kmsKeyID,omitempty"`
+	// Provides information that defines a Lakehouse endpoint. This endpoint type
+	// is used for zero-ETL integrations with Lakehouse data warehouses.
+	LakehouseSettings *LakehouseSettings `json:"lakehouseSettings,omitempty"`
+	// Provides information that defines a Microsoft SQL Server endpoint.
+	MicrosoftSQLServerSettings *MicrosoftSQLServerSettings `json:"microsoftSQLServerSettings,omitempty"`
+	// Provides information that defines a MongoDB endpoint.
+	MongoDBSettings *MongoDBSettings `json:"mongoDBSettings,omitempty"`
+	// Provides information that defines a MySQL endpoint.
+	MySQLSettings *MySQLSettings `json:"mySQLSettings,omitempty"`
+	// Provides information that defines an Amazon Neptune endpoint.
+	NeptuneSettings *NeptuneSettings `json:"neptuneSettings,omitempty"`
+	// Provides information that defines an Oracle endpoint.
+	OracleSettings *OracleSettings `json:"oracleSettings,omitempty"`
+	Port           *int64          `json:"port,omitempty"`
+	// Provides information that defines a PostgreSQL endpoint.
+	PostgreSQLSettings *PostgreSQLSettings `json:"postgreSQLSettings,omitempty"`
+	// Provides information that defines a Redis target endpoint.
+	RedisSettings *RedisSettings `json:"redisSettings,omitempty"`
+	// Provides information that defines an Amazon Redshift endpoint.
+	RedshiftSettings *RedshiftSettings `json:"redshiftSettings,omitempty"`
+	// Settings for exporting data to Amazon S3.
+	S3Settings           *S3Settings `json:"s3Settings,omitempty"`
+	ServerName           *string     `json:"serverName,omitempty"`
+	ServiceAccessRoleARN *string     `json:"serviceAccessRoleARN,omitempty"`
+	SSLMode              *string     `json:"sslMode,omitempty"`
+	Status               *string     `json:"status,omitempty"`
+	// Provides information that defines a SAP ASE endpoint.
+	SybaseSettings *SybaseSettings `json:"sybaseSettings,omitempty"`
+	// Provides information that defines an Amazon Timestream endpoint.
+	TimestreamSettings *TimestreamSettings `json:"timestreamSettings,omitempty"`
+	Username           *string             `json:"username,omitempty"`
 }
 
 // Provides information about a replication instance version.
@@ -333,34 +422,46 @@ type FleetAdvisorSchemaObjectResponse struct {
 
 // Settings in JSON format for the source GCP MySQL endpoint.
 type GcpMySQLSettings struct {
-	AfterConnectScript          *string `json:"afterConnectScript,omitempty"`
-	DatabaseName                *string `json:"databaseName,omitempty"`
-	EventsPollInterval          *int64  `json:"eventsPollInterval,omitempty"`
-	MaxFileSize                 *int64  `json:"maxFileSize,omitempty"`
-	ParallelLoadThreads         *int64  `json:"parallelLoadThreads,omitempty"`
-	Password                    *string `json:"password,omitempty"`
-	Port                        *int64  `json:"port,omitempty"`
-	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
-	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
-	ServerName                  *string `json:"serverName,omitempty"`
-	ServerTimezone              *string `json:"serverTimezone,omitempty"`
-	Username                    *string `json:"username,omitempty"`
+	AfterConnectScript            *string                         `json:"afterConnectScript,omitempty"`
+	CleanSourceMetadataOnMismatch *bool                           `json:"cleanSourceMetadataOnMismatch,omitempty"`
+	DatabaseName                  *string                         `json:"databaseName,omitempty"`
+	EventsPollInterval            *int64                          `json:"eventsPollInterval,omitempty"`
+	MaxFileSize                   *int64                          `json:"maxFileSize,omitempty"`
+	ParallelLoadThreads           *int64                          `json:"parallelLoadThreads,omitempty"`
+	Password                      *ackv1alpha1.SecretKeyReference `json:"password,omitempty"`
+	Port                          *int64                          `json:"port,omitempty"`
+	SecretsManagerAccessRoleARN   *string                         `json:"secretsManagerAccessRoleARN,omitempty"`
+	// Reference field for SecretsManagerAccessRoleARN
+	SecretsManagerAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerAccessRoleRef,omitempty"`
+	SecretsManagerSecretID      *string                                  `json:"secretsManagerSecretID,omitempty"`
+	// Reference field for SecretsManagerSecretID
+	SecretsManagerSecretRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerSecretRef,omitempty"`
+	ServerName              *string                                  `json:"serverName,omitempty"`
+	ServerTimezone          *string                                  `json:"serverTimezone,omitempty"`
+	TargetDBType            *string                                  `json:"targetDBType,omitempty"`
+	Username                *string                                  `json:"username,omitempty"`
 }
 
 // Provides information that defines an IBM Db2 LUW endpoint.
 type IBMDB2Settings struct {
-	CurrentLsn                  *string `json:"currentLsn,omitempty"`
-	DatabaseName                *string `json:"databaseName,omitempty"`
-	LoadTimeout                 *int64  `json:"loadTimeout,omitempty"`
-	MaxFileSize                 *int64  `json:"maxFileSize,omitempty"`
-	MaxKBytesPerRead            *int64  `json:"maxKBytesPerRead,omitempty"`
-	Password                    *string `json:"password,omitempty"`
-	Port                        *int64  `json:"port,omitempty"`
-	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
-	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
-	ServerName                  *string `json:"serverName,omitempty"`
-	Username                    *string `json:"username,omitempty"`
-	WriteBufferSize             *int64  `json:"writeBufferSize,omitempty"`
+	CurrentLsn                  *string                         `json:"currentLsn,omitempty"`
+	DatabaseName                *string                         `json:"databaseName,omitempty"`
+	KeepCsvFiles                *bool                           `json:"keepCsvFiles,omitempty"`
+	LoadTimeout                 *int64                          `json:"loadTimeout,omitempty"`
+	MaxFileSize                 *int64                          `json:"maxFileSize,omitempty"`
+	MaxKBytesPerRead            *int64                          `json:"maxKBytesPerRead,omitempty"`
+	Password                    *ackv1alpha1.SecretKeyReference `json:"password,omitempty"`
+	Port                        *int64                          `json:"port,omitempty"`
+	SecretsManagerAccessRoleARN *string                         `json:"secretsManagerAccessRoleARN,omitempty"`
+	// Reference field for SecretsManagerAccessRoleARN
+	SecretsManagerAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerAccessRoleRef,omitempty"`
+	SecretsManagerSecretID      *string                                  `json:"secretsManagerSecretID,omitempty"`
+	// Reference field for SecretsManagerSecretID
+	SecretsManagerSecretRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerSecretRef,omitempty"`
+	ServerName              *string                                  `json:"serverName,omitempty"`
+	SetDataCaptureChanges   *bool                                    `json:"setDataCaptureChanges,omitempty"`
+	Username                *string                                  `json:"username,omitempty"`
+	WriteBufferSize         *int64                                   `json:"writeBufferSize,omitempty"`
 }
 
 // Provides information about an IBM DB2 LUW data provider.
@@ -371,6 +472,7 @@ type IbmDB2LuwDataProviderSettings struct {
 	S3AccessRoleARN *string `json:"s3AccessRoleARN,omitempty"`
 	S3Path          *string `json:"s3Path,omitempty"`
 	ServerName      *string `json:"serverName,omitempty"`
+	SSLMode         *string `json:"sslMode,omitempty"`
 }
 
 // Provides information about an IBM DB2 for z/OS data provider.
@@ -381,6 +483,7 @@ type IbmDB2ZOsDataProviderSettings struct {
 	S3AccessRoleARN *string `json:"s3AccessRoleARN,omitempty"`
 	S3Path          *string `json:"s3Path,omitempty"`
 	ServerName      *string `json:"serverName,omitempty"`
+	SSLMode         *string `json:"sslMode,omitempty"`
 }
 
 // Provides information that defines an instance profile.
@@ -391,6 +494,7 @@ type InstanceProfile struct {
 	InstanceProfileName   *string `json:"instanceProfileName,omitempty"`
 	KMSKeyARN             *string `json:"kmsKeyARN,omitempty"`
 	NetworkType           *string `json:"networkType,omitempty"`
+	PubliclyAccessible    *bool   `json:"publiclyAccessible,omitempty"`
 	SubnetGroupIdentifier *string `json:"subnetGroupIdentifier,omitempty"`
 }
 
@@ -404,15 +508,33 @@ type InventoryData struct {
 // includes the output format of records applied to the endpoint and details
 // of transaction and control table data information.
 type KafkaSettings struct {
-	Broker                  *string `json:"broker,omitempty"`
-	MessageMaxBytes         *int64  `json:"messageMaxBytes,omitempty"`
-	SASLPassword            *string `json:"saslPassword,omitempty"`
-	SASLUsername            *string `json:"saslUsername,omitempty"`
-	SSLCaCertificateARN     *string `json:"sslCaCertificateARN,omitempty"`
-	SSLClientCertificateARN *string `json:"sslClientCertificateARN,omitempty"`
-	SSLClientKeyARN         *string `json:"sslClientKeyARN,omitempty"`
-	SSLClientKeyPassword    *string `json:"sslClientKeyPassword,omitempty"`
-	Topic                   *string `json:"topic,omitempty"`
+	Broker                      *string                         `json:"broker,omitempty"`
+	IncludeControlDetails       *bool                           `json:"includeControlDetails,omitempty"`
+	IncludeNullAndEmpty         *bool                           `json:"includeNullAndEmpty,omitempty"`
+	IncludePartitionValue       *bool                           `json:"includePartitionValue,omitempty"`
+	IncludeTableAlterOperations *bool                           `json:"includeTableAlterOperations,omitempty"`
+	IncludeTransactionDetails   *bool                           `json:"includeTransactionDetails,omitempty"`
+	MessageFormat               *string                         `json:"messageFormat,omitempty"`
+	MessageMaxBytes             *int64                          `json:"messageMaxBytes,omitempty"`
+	NoHexPrefix                 *bool                           `json:"noHexPrefix,omitempty"`
+	PartitionIncludeSchemaTable *bool                           `json:"partitionIncludeSchemaTable,omitempty"`
+	SASLMechanism               *string                         `json:"saslMechanism,omitempty"`
+	SASLPassword                *ackv1alpha1.SecretKeyReference `json:"saslPassword,omitempty"`
+	SASLUsername                *string                         `json:"saslUsername,omitempty"`
+	SecurityProtocol            *string                         `json:"securityProtocol,omitempty"`
+	SSLCaCertificateARN         *string                         `json:"sslCaCertificateARN,omitempty"`
+	// Reference field for SSLCaCertificateARN
+	SSLCaCertificateRef     *ackv1alpha1.AWSResourceReferenceWrapper `json:"sslCaCertificateRef,omitempty"`
+	SSLClientCertificateARN *string                                  `json:"sslClientCertificateARN,omitempty"`
+	// Reference field for SSLClientCertificateARN
+	SSLClientCertificateRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"sslClientCertificateRef,omitempty"`
+	SSLClientKeyARN         *string                                  `json:"sslClientKeyARN,omitempty"`
+	SSLClientKeyPassword    *ackv1alpha1.SecretKeyReference          `json:"sslClientKeyPassword,omitempty"`
+	// Reference field for SSLClientKeyARN
+	SSLClientKeyRef                    *ackv1alpha1.AWSResourceReferenceWrapper `json:"sslClientKeyRef,omitempty"`
+	SSLEndpointIDentificationAlgorithm *string                                  `json:"sslEndpointIDentificationAlgorithm,omitempty"`
+	Topic                              *string                                  `json:"topic,omitempty"`
+	UseLargeIntegerValue               *bool                                    `json:"useLargeIntegerValue,omitempty"`
 }
 
 // Specifies the settings required for kerberos authentication when creating
@@ -427,8 +549,21 @@ type KerberosAuthenticationSettings struct {
 // This information includes the output format of records applied to the endpoint
 // and details of transaction and control table data information.
 type KinesisSettings struct {
-	ServiceAccessRoleARN *string `json:"serviceAccessRoleARN,omitempty"`
-	StreamARN            *string `json:"streamARN,omitempty"`
+	IncludeControlDetails       *bool   `json:"includeControlDetails,omitempty"`
+	IncludeNullAndEmpty         *bool   `json:"includeNullAndEmpty,omitempty"`
+	IncludePartitionValue       *bool   `json:"includePartitionValue,omitempty"`
+	IncludeTableAlterOperations *bool   `json:"includeTableAlterOperations,omitempty"`
+	IncludeTransactionDetails   *bool   `json:"includeTransactionDetails,omitempty"`
+	MessageFormat               *string `json:"messageFormat,omitempty"`
+	NoHexPrefix                 *bool   `json:"noHexPrefix,omitempty"`
+	PartitionIncludeSchemaTable *bool   `json:"partitionIncludeSchemaTable,omitempty"`
+	ServiceAccessRoleARN        *string `json:"serviceAccessRoleARN,omitempty"`
+	// Reference field for ServiceAccessRoleARN
+	ServiceAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"serviceAccessRoleRef,omitempty"`
+	StreamARN            *string                                  `json:"streamARN,omitempty"`
+	// Reference field for StreamARN
+	StreamRef            *ackv1alpha1.AWSResourceReferenceWrapper `json:"streamRef,omitempty"`
+	UseLargeIntegerValue *bool                                    `json:"useLargeIntegerValue,omitempty"`
 }
 
 // Provides information that defines a Lakehouse endpoint. This endpoint type
@@ -461,6 +596,7 @@ type MariaDBDataProviderSettings struct {
 	S3AccessRoleARN *string `json:"s3AccessRoleARN,omitempty"`
 	S3Path          *string `json:"s3Path,omitempty"`
 	ServerName      *string `json:"serverName,omitempty"`
+	SSLMode         *string `json:"sslMode,omitempty"`
 }
 
 // A reference to a metadata model, including its name and selection rules for
@@ -478,19 +614,33 @@ type MicrosoftSQLServerDataProviderSettings struct {
 	S3AccessRoleARN *string `json:"s3AccessRoleARN,omitempty"`
 	S3Path          *string `json:"s3Path,omitempty"`
 	ServerName      *string `json:"serverName,omitempty"`
+	SSLMode         *string `json:"sslMode,omitempty"`
 }
 
 // Provides information that defines a Microsoft SQL Server endpoint.
 type MicrosoftSQLServerSettings struct {
-	BcpPacketSize               *int64  `json:"bcpPacketSize,omitempty"`
-	ControlTablesFileGroup      *string `json:"controlTablesFileGroup,omitempty"`
-	DatabaseName                *string `json:"databaseName,omitempty"`
-	Password                    *string `json:"password,omitempty"`
-	Port                        *int64  `json:"port,omitempty"`
-	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
-	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
-	ServerName                  *string `json:"serverName,omitempty"`
-	Username                    *string `json:"username,omitempty"`
+	AuthenticationMethod        *string                         `json:"authenticationMethod,omitempty"`
+	BcpPacketSize               *int64                          `json:"bcpPacketSize,omitempty"`
+	ControlTablesFileGroup      *string                         `json:"controlTablesFileGroup,omitempty"`
+	DatabaseName                *string                         `json:"databaseName,omitempty"`
+	ForceLobLookup              *bool                           `json:"forceLobLookup,omitempty"`
+	Password                    *ackv1alpha1.SecretKeyReference `json:"password,omitempty"`
+	Port                        *int64                          `json:"port,omitempty"`
+	QuerySingleAlwaysOnNode     *bool                           `json:"querySingleAlwaysOnNode,omitempty"`
+	ReadBackupOnly              *bool                           `json:"readBackupOnly,omitempty"`
+	SafeguardPolicy             *string                         `json:"safeguardPolicy,omitempty"`
+	SecretsManagerAccessRoleARN *string                         `json:"secretsManagerAccessRoleARN,omitempty"`
+	// Reference field for SecretsManagerAccessRoleARN
+	SecretsManagerAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerAccessRoleRef,omitempty"`
+	SecretsManagerSecretID      *string                                  `json:"secretsManagerSecretID,omitempty"`
+	// Reference field for SecretsManagerSecretID
+	SecretsManagerSecretRef   *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerSecretRef,omitempty"`
+	ServerName                *string                                  `json:"serverName,omitempty"`
+	TlogAccessMode            *string                                  `json:"tlogAccessMode,omitempty"`
+	TrimSpaceInChar           *bool                                    `json:"trimSpaceInChar,omitempty"`
+	UseBcpFullLoad            *bool                                    `json:"useBcpFullLoad,omitempty"`
+	UseThirdPartyBackupDevice *bool                                    `json:"useThirdPartyBackupDevice,omitempty"`
+	Username                  *string                                  `json:"username,omitempty"`
 }
 
 // Provides information that defines a migration project.
@@ -505,26 +655,40 @@ type MigrationProject struct {
 
 // Provides information that defines a MongoDB data provider.
 type MongoDBDataProviderSettings struct {
+	AuthMechanism  *string `json:"authMechanism,omitempty"`
 	AuthSource     *string `json:"authSource,omitempty"`
+	AuthType       *string `json:"authType,omitempty"`
 	CertificateARN *string `json:"certificateARN,omitempty"`
 	DatabaseName   *string `json:"databaseName,omitempty"`
 	Port           *int64  `json:"port,omitempty"`
 	ServerName     *string `json:"serverName,omitempty"`
+	SSLMode        *string `json:"sslMode,omitempty"`
 }
 
 // Provides information that defines a MongoDB endpoint.
 type MongoDBSettings struct {
-	AuthSource                  *string `json:"authSource,omitempty"`
-	DatabaseName                *string `json:"databaseName,omitempty"`
-	DocsToInvestigate           *string `json:"docsToInvestigate,omitempty"`
-	ExtractDocID                *string `json:"extractDocID,omitempty"`
-	KMSKeyID                    *string `json:"kmsKeyID,omitempty"`
-	Password                    *string `json:"password,omitempty"`
-	Port                        *int64  `json:"port,omitempty"`
-	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
-	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
-	ServerName                  *string `json:"serverName,omitempty"`
-	Username                    *string `json:"username,omitempty"`
+	AuthMechanism     *string `json:"authMechanism,omitempty"`
+	AuthSource        *string `json:"authSource,omitempty"`
+	AuthType          *string `json:"authType,omitempty"`
+	DatabaseName      *string `json:"databaseName,omitempty"`
+	DocsToInvestigate *string `json:"docsToInvestigate,omitempty"`
+	ExtractDocID      *string `json:"extractDocID,omitempty"`
+	KMSKeyID          *string `json:"kmsKeyID,omitempty"`
+	// Reference field for KMSKeyID
+	KMSKeyRef                   *ackv1alpha1.AWSResourceReferenceWrapper `json:"kmsKeyRef,omitempty"`
+	NestingLevel                *string                                  `json:"nestingLevel,omitempty"`
+	Password                    *ackv1alpha1.SecretKeyReference          `json:"password,omitempty"`
+	Port                        *int64                                   `json:"port,omitempty"`
+	ReplicateShardCollections   *bool                                    `json:"replicateShardCollections,omitempty"`
+	SecretsManagerAccessRoleARN *string                                  `json:"secretsManagerAccessRoleARN,omitempty"`
+	// Reference field for SecretsManagerAccessRoleARN
+	SecretsManagerAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerAccessRoleRef,omitempty"`
+	SecretsManagerSecretID      *string                                  `json:"secretsManagerSecretID,omitempty"`
+	// Reference field for SecretsManagerSecretID
+	SecretsManagerSecretRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerSecretRef,omitempty"`
+	ServerName              *string                                  `json:"serverName,omitempty"`
+	UseUpdateLookUp         *bool                                    `json:"useUpdateLookUp,omitempty"`
+	Username                *string                                  `json:"username,omitempty"`
 }
 
 // Provides information that defines a MySQL data provider.
@@ -534,34 +698,49 @@ type MySQLDataProviderSettings struct {
 	S3AccessRoleARN *string `json:"s3AccessRoleARN,omitempty"`
 	S3Path          *string `json:"s3Path,omitempty"`
 	ServerName      *string `json:"serverName,omitempty"`
+	SSLMode         *string `json:"sslMode,omitempty"`
 }
 
 // Provides information that defines a MySQL endpoint.
 type MySQLSettings struct {
-	AfterConnectScript          *string `json:"afterConnectScript,omitempty"`
-	DatabaseName                *string `json:"databaseName,omitempty"`
-	EventsPollInterval          *int64  `json:"eventsPollInterval,omitempty"`
-	ExecuteTimeout              *int64  `json:"executeTimeout,omitempty"`
-	MaxFileSize                 *int64  `json:"maxFileSize,omitempty"`
-	ParallelLoadThreads         *int64  `json:"parallelLoadThreads,omitempty"`
-	Password                    *string `json:"password,omitempty"`
-	Port                        *int64  `json:"port,omitempty"`
-	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
-	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
-	ServerName                  *string `json:"serverName,omitempty"`
-	ServerTimezone              *string `json:"serverTimezone,omitempty"`
-	ServiceAccessRoleARN        *string `json:"serviceAccessRoleARN,omitempty"`
-	Username                    *string `json:"username,omitempty"`
+	AfterConnectScript            *string                         `json:"afterConnectScript,omitempty"`
+	AuthenticationMethod          *string                         `json:"authenticationMethod,omitempty"`
+	CleanSourceMetadataOnMismatch *bool                           `json:"cleanSourceMetadataOnMismatch,omitempty"`
+	DatabaseName                  *string                         `json:"databaseName,omitempty"`
+	EventsPollInterval            *int64                          `json:"eventsPollInterval,omitempty"`
+	ExecuteTimeout                *int64                          `json:"executeTimeout,omitempty"`
+	MaxFileSize                   *int64                          `json:"maxFileSize,omitempty"`
+	ParallelLoadThreads           *int64                          `json:"parallelLoadThreads,omitempty"`
+	Password                      *ackv1alpha1.SecretKeyReference `json:"password,omitempty"`
+	Port                          *int64                          `json:"port,omitempty"`
+	SecretsManagerAccessRoleARN   *string                         `json:"secretsManagerAccessRoleARN,omitempty"`
+	// Reference field for SecretsManagerAccessRoleARN
+	SecretsManagerAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerAccessRoleRef,omitempty"`
+	SecretsManagerSecretID      *string                                  `json:"secretsManagerSecretID,omitempty"`
+	// Reference field for SecretsManagerSecretID
+	SecretsManagerSecretRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerSecretRef,omitempty"`
+	ServerName              *string                                  `json:"serverName,omitempty"`
+	ServerTimezone          *string                                  `json:"serverTimezone,omitempty"`
+	ServiceAccessRoleARN    *string                                  `json:"serviceAccessRoleARN,omitempty"`
+	// Reference field for ServiceAccessRoleARN
+	ServiceAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"serviceAccessRoleRef,omitempty"`
+	TargetDBType         *string                                  `json:"targetDBType,omitempty"`
+	Username             *string                                  `json:"username,omitempty"`
 }
 
 // Provides information that defines an Amazon Neptune endpoint.
 type NeptuneSettings struct {
-	ErrorRetryDuration   *int64  `json:"errorRetryDuration,omitempty"`
-	MaxFileSize          *int64  `json:"maxFileSize,omitempty"`
-	MaxRetryCount        *int64  `json:"maxRetryCount,omitempty"`
-	S3BucketFolder       *string `json:"s3BucketFolder,omitempty"`
-	S3BucketName         *string `json:"s3BucketName,omitempty"`
-	ServiceAccessRoleARN *string `json:"serviceAccessRoleARN,omitempty"`
+	ErrorRetryDuration *int64  `json:"errorRetryDuration,omitempty"`
+	IAMAuthEnabled     *bool   `json:"iamAuthEnabled,omitempty"`
+	MaxFileSize        *int64  `json:"maxFileSize,omitempty"`
+	MaxRetryCount      *int64  `json:"maxRetryCount,omitempty"`
+	S3BucketFolder     *string `json:"s3BucketFolder,omitempty"`
+	S3BucketName       *string `json:"s3BucketName,omitempty"`
+	// Reference field for S3BucketName
+	S3BucketRef          *ackv1alpha1.AWSResourceReferenceWrapper `json:"s3BucketRef,omitempty"`
+	ServiceAccessRoleARN *string                                  `json:"serviceAccessRoleARN,omitempty"`
+	// Reference field for ServiceAccessRoleARN
+	ServiceAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"serviceAccessRoleRef,omitempty"`
 }
 
 // Provides information that defines an Oracle data provider.
@@ -577,43 +756,71 @@ type OracleDataProviderSettings struct {
 	SecretsManagerSecurityDBEncryptionAccessRoleARN *string `json:"secretsManagerSecurityDBEncryptionAccessRoleARN,omitempty"`
 	SecretsManagerSecurityDBEncryptionSecretID      *string `json:"secretsManagerSecurityDBEncryptionSecretID,omitempty"`
 	ServerName                                      *string `json:"serverName,omitempty"`
+	SSLMode                                         *string `json:"sslMode,omitempty"`
 }
 
 // Provides information that defines an Oracle endpoint.
 type OracleSettings struct {
-	AdditionalArchivedLogDestID            *int64  `json:"additionalArchivedLogDestID,omitempty"`
-	ArchivedLogDestID                      *int64  `json:"archivedLogDestID,omitempty"`
-	AsmPassword                            *string `json:"asmPassword,omitempty"`
-	AsmServer                              *string `json:"asmServer,omitempty"`
-	AsmUser                                *string `json:"asmUser,omitempty"`
-	DatabaseName                           *string `json:"databaseName,omitempty"`
-	NumberDatatypeScale                    *int64  `json:"numberDatatypeScale,omitempty"`
-	OpenTransactionWindow                  *int64  `json:"openTransactionWindow,omitempty"`
-	OraclePathPrefix                       *string `json:"oraclePathPrefix,omitempty"`
-	ParallelAsmReadThreads                 *int64  `json:"parallelAsmReadThreads,omitempty"`
-	Password                               *string `json:"password,omitempty"`
-	Port                                   *int64  `json:"port,omitempty"`
-	ReadAheadBlocks                        *int64  `json:"readAheadBlocks,omitempty"`
-	RetryInterval                          *int64  `json:"retryInterval,omitempty"`
-	SecretsManagerAccessRoleARN            *string `json:"secretsManagerAccessRoleARN,omitempty"`
-	SecretsManagerOracleAsmAccessRoleARN   *string `json:"secretsManagerOracleAsmAccessRoleARN,omitempty"`
-	SecretsManagerOracleAsmSecretID        *string `json:"secretsManagerOracleAsmSecretID,omitempty"`
-	SecretsManagerSecretID                 *string `json:"secretsManagerSecretID,omitempty"`
-	SecurityDBEncryption                   *string `json:"securityDBEncryption,omitempty"`
-	SecurityDBEncryptionName               *string `json:"securityDBEncryptionName,omitempty"`
-	ServerName                             *string `json:"serverName,omitempty"`
-	SpatialDataOptionToGeoJSONFunctionName *string `json:"spatialDataOptionToGeoJSONFunctionName,omitempty"`
-	StandbyDelayTime                       *int64  `json:"standbyDelayTime,omitempty"`
-	UsePathPrefix                          *string `json:"usePathPrefix,omitempty"`
-	Username                               *string `json:"username,omitempty"`
+	AccessAlternateDirectly       *bool                           `json:"accessAlternateDirectly,omitempty"`
+	AddSupplementalLogging        *bool                           `json:"addSupplementalLogging,omitempty"`
+	AdditionalArchivedLogDestID   *int64                          `json:"additionalArchivedLogDestID,omitempty"`
+	AllowSelectNestedTables       *bool                           `json:"allowSelectNestedTables,omitempty"`
+	ArchivedLogDestID             *int64                          `json:"archivedLogDestID,omitempty"`
+	ArchivedLogsOnly              *bool                           `json:"archivedLogsOnly,omitempty"`
+	AsmPassword                   *ackv1alpha1.SecretKeyReference `json:"asmPassword,omitempty"`
+	AsmServer                     *string                         `json:"asmServer,omitempty"`
+	AsmUser                       *string                         `json:"asmUser,omitempty"`
+	AuthenticationMethod          *string                         `json:"authenticationMethod,omitempty"`
+	CharLengthSemantics           *string                         `json:"charLengthSemantics,omitempty"`
+	ConvertTimestampWithZoneToUTC *bool                           `json:"convertTimestampWithZoneToUTC,omitempty"`
+	DatabaseName                  *string                         `json:"databaseName,omitempty"`
+	DirectPathNoLog               *bool                           `json:"directPathNoLog,omitempty"`
+	DirectPathParallelLoad        *bool                           `json:"directPathParallelLoad,omitempty"`
+	EnableHomogenousTablespace    *bool                           `json:"enableHomogenousTablespace,omitempty"`
+	ExtraArchivedLogDestIDs       []*int64                        `json:"extraArchivedLogDestIDs,omitempty"`
+	FailTasksOnLobTruncation      *bool                           `json:"failTasksOnLobTruncation,omitempty"`
+	NumberDatatypeScale           *int64                          `json:"numberDatatypeScale,omitempty"`
+	OpenTransactionWindow         *int64                          `json:"openTransactionWindow,omitempty"`
+	OraclePathPrefix              *string                         `json:"oraclePathPrefix,omitempty"`
+	ParallelAsmReadThreads        *int64                          `json:"parallelAsmReadThreads,omitempty"`
+	Password                      *ackv1alpha1.SecretKeyReference `json:"password,omitempty"`
+	Port                          *int64                          `json:"port,omitempty"`
+	ReadAheadBlocks               *int64                          `json:"readAheadBlocks,omitempty"`
+	ReadTableSpaceName            *bool                           `json:"readTableSpaceName,omitempty"`
+	ReplacePathPrefix             *bool                           `json:"replacePathPrefix,omitempty"`
+	RetryInterval                 *int64                          `json:"retryInterval,omitempty"`
+	SecretsManagerAccessRoleARN   *string                         `json:"secretsManagerAccessRoleARN,omitempty"`
+	// Reference field for SecretsManagerAccessRoleARN
+	SecretsManagerAccessRoleRef          *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerAccessRoleRef,omitempty"`
+	SecretsManagerOracleAsmAccessRoleARN *string                                  `json:"secretsManagerOracleAsmAccessRoleARN,omitempty"`
+	SecretsManagerOracleAsmSecretID      *string                                  `json:"secretsManagerOracleAsmSecretID,omitempty"`
+	SecretsManagerSecretID               *string                                  `json:"secretsManagerSecretID,omitempty"`
+	// Reference field for SecretsManagerSecretID
+	SecretsManagerSecretRef                *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerSecretRef,omitempty"`
+	SecurityDBEncryption                   *string                                  `json:"securityDBEncryption,omitempty"`
+	SecurityDBEncryptionName               *string                                  `json:"securityDBEncryptionName,omitempty"`
+	ServerName                             *string                                  `json:"serverName,omitempty"`
+	SpatialDataOptionToGeoJSONFunctionName *string                                  `json:"spatialDataOptionToGeoJSONFunctionName,omitempty"`
+	StandbyDelayTime                       *int64                                   `json:"standbyDelayTime,omitempty"`
+	TrimSpaceInChar                        *bool                                    `json:"trimSpaceInChar,omitempty"`
+	UseAlternateFolderForOnline            *bool                                    `json:"useAlternateFolderForOnline,omitempty"`
+	UseBFile                               *bool                                    `json:"useBFile,omitempty"`
+	UseDirectPathFullLoad                  *bool                                    `json:"useDirectPathFullLoad,omitempty"`
+	UseLogminerReader                      *bool                                    `json:"useLogminerReader,omitempty"`
+	UsePathPrefix                          *string                                  `json:"usePathPrefix,omitempty"`
+	Username                               *string                                  `json:"username,omitempty"`
 }
 
 // In response to the DescribeOrderableReplicationInstances operation, this
 // object describes an available replication instance. This description includes
 // the replication instance's type, engine version, and allocated storage.
 type OrderableReplicationInstance struct {
-	EngineVersion *string `json:"engineVersion,omitempty"`
-	StorageType   *string `json:"storageType,omitempty"`
+	DefaultAllocatedStorage  *int64  `json:"defaultAllocatedStorage,omitempty"`
+	EngineVersion            *string `json:"engineVersion,omitempty"`
+	IncludedAllocatedStorage *int64  `json:"includedAllocatedStorage,omitempty"`
+	MaxAllocatedStorage      *int64  `json:"maxAllocatedStorage,omitempty"`
+	MinAllocatedStorage      *int64  `json:"minAllocatedStorage,omitempty"`
+	StorageType              *string `json:"storageType,omitempty"`
 }
 
 // Describes a maintenance action pending for an DMS resource, including when
@@ -636,26 +843,44 @@ type PostgreSQLDataProviderSettings struct {
 	S3AccessRoleARN *string `json:"s3AccessRoleARN,omitempty"`
 	S3Path          *string `json:"s3Path,omitempty"`
 	ServerName      *string `json:"serverName,omitempty"`
+	SSLMode         *string `json:"sslMode,omitempty"`
 }
 
 // Provides information that defines a PostgreSQL endpoint.
 type PostgreSQLSettings struct {
-	AfterConnectScript          *string `json:"afterConnectScript,omitempty"`
-	BabelfishDatabaseName       *string `json:"babelfishDatabaseName,omitempty"`
-	DatabaseName                *string `json:"databaseName,omitempty"`
-	DdlArtifactsSchema          *string `json:"ddlArtifactsSchema,omitempty"`
-	ExecuteTimeout              *int64  `json:"executeTimeout,omitempty"`
-	HeartbeatFrequency          *int64  `json:"heartbeatFrequency,omitempty"`
-	HeartbeatSchema             *string `json:"heartbeatSchema,omitempty"`
-	MaxFileSize                 *int64  `json:"maxFileSize,omitempty"`
-	Password                    *string `json:"password,omitempty"`
-	Port                        *int64  `json:"port,omitempty"`
-	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
-	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
-	ServerName                  *string `json:"serverName,omitempty"`
-	ServiceAccessRoleARN        *string `json:"serviceAccessRoleARN,omitempty"`
-	SlotName                    *string `json:"slotName,omitempty"`
-	Username                    *string `json:"username,omitempty"`
+	AfterConnectScript          *string                         `json:"afterConnectScript,omitempty"`
+	AuthenticationMethod        *string                         `json:"authenticationMethod,omitempty"`
+	BabelfishDatabaseName       *string                         `json:"babelfishDatabaseName,omitempty"`
+	CaptureDdls                 *bool                           `json:"captureDdls,omitempty"`
+	DatabaseMode                *string                         `json:"databaseMode,omitempty"`
+	DatabaseName                *string                         `json:"databaseName,omitempty"`
+	DdlArtifactsSchema          *string                         `json:"ddlArtifactsSchema,omitempty"`
+	DisableUnicodeSourceFilter  *bool                           `json:"disableUnicodeSourceFilter,omitempty"`
+	ExecuteTimeout              *int64                          `json:"executeTimeout,omitempty"`
+	FailTasksOnLobTruncation    *bool                           `json:"failTasksOnLobTruncation,omitempty"`
+	HeartbeatEnable             *bool                           `json:"heartbeatEnable,omitempty"`
+	HeartbeatFrequency          *int64                          `json:"heartbeatFrequency,omitempty"`
+	HeartbeatSchema             *string                         `json:"heartbeatSchema,omitempty"`
+	MapBooleanAsBoolean         *bool                           `json:"mapBooleanAsBoolean,omitempty"`
+	MapJSONbAsClob              *bool                           `json:"mapJSONbAsClob,omitempty"`
+	MapLongVarcharAs            *string                         `json:"mapLongVarcharAs,omitempty"`
+	MaxFileSize                 *int64                          `json:"maxFileSize,omitempty"`
+	Password                    *ackv1alpha1.SecretKeyReference `json:"password,omitempty"`
+	PluginName                  *string                         `json:"pluginName,omitempty"`
+	Port                        *int64                          `json:"port,omitempty"`
+	SecretsManagerAccessRoleARN *string                         `json:"secretsManagerAccessRoleARN,omitempty"`
+	// Reference field for SecretsManagerAccessRoleARN
+	SecretsManagerAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerAccessRoleRef,omitempty"`
+	SecretsManagerSecretID      *string                                  `json:"secretsManagerSecretID,omitempty"`
+	// Reference field for SecretsManagerSecretID
+	SecretsManagerSecretRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerSecretRef,omitempty"`
+	ServerName              *string                                  `json:"serverName,omitempty"`
+	ServiceAccessRoleARN    *string                                  `json:"serviceAccessRoleARN,omitempty"`
+	// Reference field for ServiceAccessRoleARN
+	ServiceAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"serviceAccessRoleRef,omitempty"`
+	SlotName             *string                                  `json:"slotName,omitempty"`
+	TrimSpaceInChar      *bool                                    `json:"trimSpaceInChar,omitempty"`
+	Username             *string                                  `json:"username,omitempty"`
 }
 
 // The results returned in describe-replications to display the results of the
@@ -688,6 +913,7 @@ type ProvisionData struct {
 	DateNewProvisioningDataAvailable *metav1.Time `json:"dateNewProvisioningDataAvailable,omitempty"`
 	DateProvisioned                  *metav1.Time `json:"dateProvisioned,omitempty"`
 	ProvisionState                   *string      `json:"provisionState,omitempty"`
+	ProvisionedCapacityUnits         *int64       `json:"provisionedCapacityUnits,omitempty"`
 	ReasonForNewProvisioningData     *string      `json:"reasonForNewProvisioningData,omitempty"`
 }
 
@@ -729,6 +955,7 @@ type Recommendation struct {
 	CreatedDate *string `json:"createdDate,omitempty"`
 	DatabaseID  *string `json:"databaseID,omitempty"`
 	EngineName  *string `json:"engineName,omitempty"`
+	Preferred   *bool   `json:"preferred,omitempty"`
 	Status      *string `json:"status,omitempty"`
 }
 
@@ -740,10 +967,15 @@ type RecommendationSettings struct {
 
 // Provides information that defines a Redis target endpoint.
 type RedisSettings struct {
-	AuthPassword        *string `json:"authPassword,omitempty"`
-	AuthUserName        *string `json:"authUserName,omitempty"`
-	ServerName          *string `json:"serverName,omitempty"`
-	SSLCaCertificateARN *string `json:"sslCaCertificateARN,omitempty"`
+	AuthPassword        *ackv1alpha1.SecretKeyReference `json:"authPassword,omitempty"`
+	AuthType            *string                         `json:"authType,omitempty"`
+	AuthUserName        *string                         `json:"authUserName,omitempty"`
+	Port                *int64                          `json:"port,omitempty"`
+	ServerName          *string                         `json:"serverName,omitempty"`
+	SSLCaCertificateARN *string                         `json:"sslCaCertificateARN,omitempty"`
+	// Reference field for SSLCaCertificateARN
+	SSLCaCertificateRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"sslCaCertificateRef,omitempty"`
+	SSLSecurityProtocol *string                                  `json:"sslSecurityProtocol,omitempty"`
 }
 
 // Provides information that defines an Amazon Redshift data provider.
@@ -757,27 +989,47 @@ type RedshiftDataProviderSettings struct {
 
 // Provides information that defines an Amazon Redshift endpoint.
 type RedshiftSettings struct {
-	AfterConnectScript           *string `json:"afterConnectScript,omitempty"`
-	BucketFolder                 *string `json:"bucketFolder,omitempty"`
-	BucketName                   *string `json:"bucketName,omitempty"`
-	ConnectionTimeout            *int64  `json:"connectionTimeout,omitempty"`
-	DatabaseName                 *string `json:"databaseName,omitempty"`
-	DateFormat                   *string `json:"dateFormat,omitempty"`
-	FileTransferUploadStreams    *int64  `json:"fileTransferUploadStreams,omitempty"`
-	LoadTimeout                  *int64  `json:"loadTimeout,omitempty"`
-	MaxFileSize                  *int64  `json:"maxFileSize,omitempty"`
-	Password                     *string `json:"password,omitempty"`
-	Port                         *int64  `json:"port,omitempty"`
-	ReplaceChars                 *string `json:"replaceChars,omitempty"`
-	ReplaceInvalidChars          *string `json:"replaceInvalidChars,omitempty"`
-	SecretsManagerAccessRoleARN  *string `json:"secretsManagerAccessRoleARN,omitempty"`
-	SecretsManagerSecretID       *string `json:"secretsManagerSecretID,omitempty"`
-	ServerName                   *string `json:"serverName,omitempty"`
-	ServerSideEncryptionKMSKeyID *string `json:"serverSideEncryptionKMSKeyID,omitempty"`
-	ServiceAccessRoleARN         *string `json:"serviceAccessRoleARN,omitempty"`
-	TimeFormat                   *string `json:"timeFormat,omitempty"`
-	Username                     *string `json:"username,omitempty"`
-	WriteBufferSize              *int64  `json:"writeBufferSize,omitempty"`
+	AcceptAnyDate      *bool   `json:"acceptAnyDate,omitempty"`
+	AfterConnectScript *string `json:"afterConnectScript,omitempty"`
+	BucketFolder       *string `json:"bucketFolder,omitempty"`
+	BucketName         *string `json:"bucketName,omitempty"`
+	// Reference field for BucketName
+	BucketRef                   *ackv1alpha1.AWSResourceReferenceWrapper `json:"bucketRef,omitempty"`
+	CaseSensitiveNames          *bool                                    `json:"caseSensitiveNames,omitempty"`
+	CompUpdate                  *bool                                    `json:"compUpdate,omitempty"`
+	ConnectionTimeout           *int64                                   `json:"connectionTimeout,omitempty"`
+	DatabaseName                *string                                  `json:"databaseName,omitempty"`
+	DateFormat                  *string                                  `json:"dateFormat,omitempty"`
+	EmptyAsNull                 *bool                                    `json:"emptyAsNull,omitempty"`
+	EncryptionMode              *string                                  `json:"encryptionMode,omitempty"`
+	ExplicitIDs                 *bool                                    `json:"explicitIDs,omitempty"`
+	FileTransferUploadStreams   *int64                                   `json:"fileTransferUploadStreams,omitempty"`
+	LoadTimeout                 *int64                                   `json:"loadTimeout,omitempty"`
+	MapBooleanAsBoolean         *bool                                    `json:"mapBooleanAsBoolean,omitempty"`
+	MaxFileSize                 *int64                                   `json:"maxFileSize,omitempty"`
+	Password                    *ackv1alpha1.SecretKeyReference          `json:"password,omitempty"`
+	Port                        *int64                                   `json:"port,omitempty"`
+	RemoveQuotes                *bool                                    `json:"removeQuotes,omitempty"`
+	ReplaceChars                *string                                  `json:"replaceChars,omitempty"`
+	ReplaceInvalidChars         *string                                  `json:"replaceInvalidChars,omitempty"`
+	SecretsManagerAccessRoleARN *string                                  `json:"secretsManagerAccessRoleARN,omitempty"`
+	// Reference field for SecretsManagerAccessRoleARN
+	SecretsManagerAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerAccessRoleRef,omitempty"`
+	SecretsManagerSecretID      *string                                  `json:"secretsManagerSecretID,omitempty"`
+	// Reference field for SecretsManagerSecretID
+	SecretsManagerSecretRef      *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerSecretRef,omitempty"`
+	ServerName                   *string                                  `json:"serverName,omitempty"`
+	ServerSideEncryptionKMSKeyID *string                                  `json:"serverSideEncryptionKMSKeyID,omitempty"`
+	// Reference field for ServerSideEncryptionKMSKeyID
+	ServerSideEncryptionKMSKeyRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"serverSideEncryptionKMSKeyRef,omitempty"`
+	ServiceAccessRoleARN          *string                                  `json:"serviceAccessRoleARN,omitempty"`
+	// Reference field for ServiceAccessRoleARN
+	ServiceAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"serviceAccessRoleRef,omitempty"`
+	TimeFormat           *string                                  `json:"timeFormat,omitempty"`
+	TrimBlanks           *bool                                    `json:"trimBlanks,omitempty"`
+	TruncateColumns      *bool                                    `json:"truncateColumns,omitempty"`
+	Username             *string                                  `json:"username,omitempty"`
+	WriteBufferSize      *int64                                   `json:"writeBufferSize,omitempty"`
 }
 
 // Provides information that describes status of a schema at an endpoint specified
@@ -795,6 +1047,7 @@ type Replication struct {
 	CdcStartPosition            *string      `json:"cdcStartPosition,omitempty"`
 	CdcStartTime                *metav1.Time `json:"cdcStartTime,omitempty"`
 	CdcStopPosition             *string      `json:"cdcStopPosition,omitempty"`
+	IsReadOnly                  *bool        `json:"isReadOnly,omitempty"`
 	RecoveryCheckpoint          *string      `json:"recoveryCheckpoint,omitempty"`
 	ReplicationConfigARN        *string      `json:"replicationConfigARN,omitempty"`
 	ReplicationConfigIdentifier *string      `json:"replicationConfigIdentifier,omitempty"`
@@ -811,6 +1064,7 @@ type Replication struct {
 
 // This object provides configuration information about a serverless replication.
 type ReplicationConfig struct {
+	IsReadOnly                  *bool        `json:"isReadOnly,omitempty"`
 	ReplicationConfigARN        *string      `json:"replicationConfigARN,omitempty"`
 	ReplicationConfigCreateTime *metav1.Time `json:"replicationConfigCreateTime,omitempty"`
 	ReplicationConfigIdentifier *string      `json:"replicationConfigIdentifier,omitempty"`
@@ -824,6 +1078,7 @@ type ReplicationConfig struct {
 
 // Provides information that defines a replication instance.
 type ReplicationInstance struct {
+	AllocatedStorage                    *int64       `json:"allocatedStorage,omitempty"`
 	AvailabilityZone                    *string      `json:"availabilityZone,omitempty"`
 	DNSNameServers                      *string      `json:"dnsNameServers,omitempty"`
 	EngineVersion                       *string      `json:"engineVersion,omitempty"`
@@ -852,21 +1107,28 @@ type ReplicationInstanceTaskLog struct {
 type ReplicationPendingModifiedValues struct {
 	AllocatedStorage *int64  `json:"allocatedStorage,omitempty"`
 	EngineVersion    *string `json:"engineVersion,omitempty"`
+	MultiAZ          *bool   `json:"multiAZ,omitempty"`
 	NetworkType      *string `json:"networkType,omitempty"`
 }
 
 // This object provides a collection of statistics about a serverless replication.
 type ReplicationStats struct {
-	FreshStartDate     *metav1.Time `json:"freshStartDate,omitempty"`
-	FullLoadFinishDate *metav1.Time `json:"fullLoadFinishDate,omitempty"`
-	FullLoadStartDate  *metav1.Time `json:"fullLoadStartDate,omitempty"`
-	StartDate          *metav1.Time `json:"startDate,omitempty"`
-	StopDate           *metav1.Time `json:"stopDate,omitempty"`
+	FreshStartDate          *metav1.Time `json:"freshStartDate,omitempty"`
+	FullLoadFinishDate      *metav1.Time `json:"fullLoadFinishDate,omitempty"`
+	FullLoadProgressPercent *int64       `json:"fullLoadProgressPercent,omitempty"`
+	FullLoadStartDate       *metav1.Time `json:"fullLoadStartDate,omitempty"`
+	StartDate               *metav1.Time `json:"startDate,omitempty"`
+	StopDate                *metav1.Time `json:"stopDate,omitempty"`
+	TablesErrored           *int64       `json:"tablesErrored,omitempty"`
+	TablesLoaded            *int64       `json:"tablesLoaded,omitempty"`
+	TablesLoading           *int64       `json:"tablesLoading,omitempty"`
+	TablesQueued            *int64       `json:"tablesQueued,omitempty"`
 }
 
 // Describes a subnet group in response to a request by the DescribeReplicationSubnetGroups
 // operation.
 type ReplicationSubnetGroup struct {
+	IsReadOnly                        *bool   `json:"isReadOnly,omitempty"`
 	ReplicationSubnetGroupDescription *string `json:"replicationSubnetGroupDescription,omitempty"`
 	ReplicationSubnetGroupIdentifier  *string `json:"replicationSubnetGroupIdentifier,omitempty"`
 	SubnetGroupStatus                 *string `json:"subnetGroupStatus,omitempty"`
@@ -925,6 +1187,22 @@ type ReplicationTaskAssessmentRun struct {
 	Status                                   *string      `json:"status,omitempty"`
 }
 
+// The progress values reported by the AssessmentProgress response element.
+type ReplicationTaskAssessmentRunProgress struct {
+	IndividualAssessmentCompletedCount *int64 `json:"individualAssessmentCompletedCount,omitempty"`
+	IndividualAssessmentCount          *int64 `json:"individualAssessmentCount,omitempty"`
+}
+
+// The object containing the result statistics for a completed assessment run.
+type ReplicationTaskAssessmentRunResultStatistic struct {
+	Cancelled *int64 `json:"cancelled,omitempty"`
+	Error     *int64 `json:"error,omitempty"`
+	Failed    *int64 `json:"failed,omitempty"`
+	Passed    *int64 `json:"passed,omitempty"`
+	Skipped   *int64 `json:"skipped,omitempty"`
+	Warning   *int64 `json:"warning,omitempty"`
+}
+
 // Provides information that describes an individual assessment from a premigration
 // assessment run.
 type ReplicationTaskIndividualAssessment struct {
@@ -938,11 +1216,16 @@ type ReplicationTaskIndividualAssessment struct {
 // In response to a request by the DescribeReplicationTasks operation, this
 // object provides a collection of statistics about a replication task.
 type ReplicationTaskStats struct {
-	FreshStartDate     *metav1.Time `json:"freshStartDate,omitempty"`
-	FullLoadFinishDate *metav1.Time `json:"fullLoadFinishDate,omitempty"`
-	FullLoadStartDate  *metav1.Time `json:"fullLoadStartDate,omitempty"`
-	StartDate          *metav1.Time `json:"startDate,omitempty"`
-	StopDate           *metav1.Time `json:"stopDate,omitempty"`
+	FreshStartDate          *metav1.Time `json:"freshStartDate,omitempty"`
+	FullLoadFinishDate      *metav1.Time `json:"fullLoadFinishDate,omitempty"`
+	FullLoadProgressPercent *int64       `json:"fullLoadProgressPercent,omitempty"`
+	FullLoadStartDate       *metav1.Time `json:"fullLoadStartDate,omitempty"`
+	StartDate               *metav1.Time `json:"startDate,omitempty"`
+	StopDate                *metav1.Time `json:"stopDate,omitempty"`
+	TablesErrored           *int64       `json:"tablesErrored,omitempty"`
+	TablesLoaded            *int64       `json:"tablesLoaded,omitempty"`
+	TablesLoading           *int64       `json:"tablesLoading,omitempty"`
+	TablesQueued            *int64       `json:"tablesQueued,omitempty"`
 }
 
 // Identifies an DMS resource and any pending actions for it.
@@ -952,26 +1235,53 @@ type ResourcePendingMaintenanceActions struct {
 
 // Settings for exporting data to Amazon S3.
 type S3Settings struct {
-	BucketFolder                 *string `json:"bucketFolder,omitempty"`
-	BucketName                   *string `json:"bucketName,omitempty"`
-	CdcMaxBatchInterval          *int64  `json:"cdcMaxBatchInterval,omitempty"`
-	CdcMinFileSize               *int64  `json:"cdcMinFileSize,omitempty"`
-	CdcPath                      *string `json:"cdcPath,omitempty"`
-	CsvDelimiter                 *string `json:"csvDelimiter,omitempty"`
-	CsvNoSupValue                *string `json:"csvNoSupValue,omitempty"`
-	CsvNullValue                 *string `json:"csvNullValue,omitempty"`
-	CsvRowDelimiter              *string `json:"csvRowDelimiter,omitempty"`
-	DataPageSize                 *int64  `json:"dataPageSize,omitempty"`
-	DatePartitionTimezone        *string `json:"datePartitionTimezone,omitempty"`
-	DictPageSizeLimit            *int64  `json:"dictPageSizeLimit,omitempty"`
-	ExpectedBucketOwner          *string `json:"expectedBucketOwner,omitempty"`
-	ExternalTableDefinition      *string `json:"externalTableDefinition,omitempty"`
-	IgnoreHeaderRows             *int64  `json:"ignoreHeaderRows,omitempty"`
-	MaxFileSize                  *int64  `json:"maxFileSize,omitempty"`
-	RowGroupLength               *int64  `json:"rowGroupLength,omitempty"`
-	ServerSideEncryptionKMSKeyID *string `json:"serverSideEncryptionKMSKeyID,omitempty"`
-	ServiceAccessRoleARN         *string `json:"serviceAccessRoleARN,omitempty"`
-	TimestampColumnName          *string `json:"timestampColumnName,omitempty"`
+	AddColumnName               *bool   `json:"addColumnName,omitempty"`
+	AddTrailingPaddingCharacter *bool   `json:"addTrailingPaddingCharacter,omitempty"`
+	BucketFolder                *string `json:"bucketFolder,omitempty"`
+	BucketName                  *string `json:"bucketName,omitempty"`
+	// Reference field for BucketName
+	BucketRef                     *ackv1alpha1.AWSResourceReferenceWrapper `json:"bucketRef,omitempty"`
+	CannedACLForObjects           *string                                  `json:"cannedACLForObjects,omitempty"`
+	CdcInsertsAndUpdates          *bool                                    `json:"cdcInsertsAndUpdates,omitempty"`
+	CdcInsertsOnly                *bool                                    `json:"cdcInsertsOnly,omitempty"`
+	CdcMaxBatchInterval           *int64                                   `json:"cdcMaxBatchInterval,omitempty"`
+	CdcMinFileSize                *int64                                   `json:"cdcMinFileSize,omitempty"`
+	CdcPath                       *string                                  `json:"cdcPath,omitempty"`
+	CompressionType               *string                                  `json:"compressionType,omitempty"`
+	CsvDelimiter                  *string                                  `json:"csvDelimiter,omitempty"`
+	CsvNoSupValue                 *string                                  `json:"csvNoSupValue,omitempty"`
+	CsvNullValue                  *string                                  `json:"csvNullValue,omitempty"`
+	CsvRowDelimiter               *string                                  `json:"csvRowDelimiter,omitempty"`
+	DataFormat                    *string                                  `json:"dataFormat,omitempty"`
+	DataPageSize                  *int64                                   `json:"dataPageSize,omitempty"`
+	DatePartitionDelimiter        *string                                  `json:"datePartitionDelimiter,omitempty"`
+	DatePartitionEnabled          *bool                                    `json:"datePartitionEnabled,omitempty"`
+	DatePartitionSequence         *string                                  `json:"datePartitionSequence,omitempty"`
+	DatePartitionTimezone         *string                                  `json:"datePartitionTimezone,omitempty"`
+	DictPageSizeLimit             *int64                                   `json:"dictPageSizeLimit,omitempty"`
+	EnableStatistics              *bool                                    `json:"enableStatistics,omitempty"`
+	EncodingType                  *string                                  `json:"encodingType,omitempty"`
+	EncryptionMode                *string                                  `json:"encryptionMode,omitempty"`
+	ExpectedBucketOwner           *string                                  `json:"expectedBucketOwner,omitempty"`
+	ExternalTableDefinition       *string                                  `json:"externalTableDefinition,omitempty"`
+	GlueCatalogGeneration         *bool                                    `json:"glueCatalogGeneration,omitempty"`
+	IgnoreHeaderRows              *int64                                   `json:"ignoreHeaderRows,omitempty"`
+	IncludeOpForFullLoad          *bool                                    `json:"includeOpForFullLoad,omitempty"`
+	MaxFileSize                   *int64                                   `json:"maxFileSize,omitempty"`
+	ParquetTimestampInMillisecond *bool                                    `json:"parquetTimestampInMillisecond,omitempty"`
+	ParquetVersion                *string                                  `json:"parquetVersion,omitempty"`
+	PreserveTransactions          *bool                                    `json:"preserveTransactions,omitempty"`
+	RFC4180                       *bool                                    `json:"rfc4180,omitempty"`
+	RowGroupLength                *int64                                   `json:"rowGroupLength,omitempty"`
+	ServerSideEncryptionKMSKeyID  *string                                  `json:"serverSideEncryptionKMSKeyID,omitempty"`
+	// Reference field for ServerSideEncryptionKMSKeyID
+	ServerSideEncryptionKMSKeyRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"serverSideEncryptionKMSKeyRef,omitempty"`
+	ServiceAccessRoleARN          *string                                  `json:"serviceAccessRoleARN,omitempty"`
+	// Reference field for ServiceAccessRoleARN
+	ServiceAccessRoleRef                 *ackv1alpha1.AWSResourceReferenceWrapper `json:"serviceAccessRoleRef,omitempty"`
+	TimestampColumnName                  *string                                  `json:"timestampColumnName,omitempty"`
+	UseCsvNoSupValue                     *bool                                    `json:"useCsvNoSupValue,omitempty"`
+	UseTaskStartTimeForFullLoadTimestamp *bool                                    `json:"useTaskStartTimeForFullLoadTimestamp,omitempty"`
 }
 
 // Provides information that defines a schema conversion application.
@@ -1040,6 +1350,7 @@ type Subnet struct {
 // the type of endpoint, the database engine name, and whether change data capture
 // (CDC) is supported.
 type SupportedEndpointType struct {
+	EndpointType                            *string `json:"endpointType,omitempty"`
 	EngineDisplayName                       *string `json:"engineDisplayName,omitempty"`
 	EngineName                              *string `json:"engineName,omitempty"`
 	ReplicationInstanceEngineMinimumVersion *string `json:"replicationInstanceEngineMinimumVersion,omitempty"`
@@ -1047,27 +1358,34 @@ type SupportedEndpointType struct {
 
 // Provides information that defines an SAP ASE data provider.
 type SybaseAseDataProviderSettings struct {
-	CertificateARN *string `json:"certificateARN,omitempty"`
-	DatabaseName   *string `json:"databaseName,omitempty"`
-	Port           *int64  `json:"port,omitempty"`
-	ServerName     *string `json:"serverName,omitempty"`
+	CertificateARN  *string `json:"certificateARN,omitempty"`
+	DatabaseName    *string `json:"databaseName,omitempty"`
+	EncryptPassword *bool   `json:"encryptPassword,omitempty"`
+	Port            *int64  `json:"port,omitempty"`
+	ServerName      *string `json:"serverName,omitempty"`
+	SSLMode         *string `json:"sslMode,omitempty"`
 }
 
 // Provides information that defines a SAP ASE endpoint.
 type SybaseSettings struct {
-	DatabaseName                *string `json:"databaseName,omitempty"`
-	Password                    *string `json:"password,omitempty"`
-	Port                        *int64  `json:"port,omitempty"`
-	SecretsManagerAccessRoleARN *string `json:"secretsManagerAccessRoleARN,omitempty"`
-	SecretsManagerSecretID      *string `json:"secretsManagerSecretID,omitempty"`
-	ServerName                  *string `json:"serverName,omitempty"`
-	Username                    *string `json:"username,omitempty"`
+	DatabaseName                *string                         `json:"databaseName,omitempty"`
+	Password                    *ackv1alpha1.SecretKeyReference `json:"password,omitempty"`
+	Port                        *int64                          `json:"port,omitempty"`
+	SecretsManagerAccessRoleARN *string                         `json:"secretsManagerAccessRoleARN,omitempty"`
+	// Reference field for SecretsManagerAccessRoleARN
+	SecretsManagerAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerAccessRoleRef,omitempty"`
+	SecretsManagerSecretID      *string                                  `json:"secretsManagerSecretID,omitempty"`
+	// Reference field for SecretsManagerSecretID
+	SecretsManagerSecretRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerSecretRef,omitempty"`
+	ServerName              *string                                  `json:"serverName,omitempty"`
+	Username                *string                                  `json:"username,omitempty"`
 }
 
 // Provides a collection of table statistics in response to a request by the
 // DescribeTableStatistics operation.
 type TableStatistics struct {
 	FullLoadEndTime        *metav1.Time `json:"fullLoadEndTime,omitempty"`
+	FullLoadReloaded       *bool        `json:"fullLoadReloaded,omitempty"`
 	FullLoadStartTime      *metav1.Time `json:"fullLoadStartTime,omitempty"`
 	LastUpdateTime         *metav1.Time `json:"lastUpdateTime,omitempty"`
 	ResyncState            *string      `json:"resyncState,omitempty"`
@@ -1099,9 +1417,11 @@ type Tag struct {
 
 // Provides information that defines an Amazon Timestream endpoint.
 type TimestreamSettings struct {
-	DatabaseName     *string `json:"databaseName,omitempty"`
-	MagneticDuration *int64  `json:"magneticDuration,omitempty"`
-	MemoryDuration   *int64  `json:"memoryDuration,omitempty"`
+	CdcInsertsAndUpdates      *bool   `json:"cdcInsertsAndUpdates,omitempty"`
+	DatabaseName              *string `json:"databaseName,omitempty"`
+	EnableMagneticStoreWrites *bool   `json:"enableMagneticStoreWrites,omitempty"`
+	MagneticDuration          *int64  `json:"magneticDuration,omitempty"`
+	MemoryDuration            *int64  `json:"memoryDuration,omitempty"`
 }
 
 // Describes the status of a security group associated with the virtual private

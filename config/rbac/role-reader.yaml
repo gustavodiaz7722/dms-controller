@@ -10,6 +10,7 @@ rules:
   - dms.services.k8s.aws
   resources:
   - certificates
+  - endpoints
   verbs:
   - get
   - list

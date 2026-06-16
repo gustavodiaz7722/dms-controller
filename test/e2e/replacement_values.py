@@ -13,6 +13,15 @@
 """Stores the values used by each of the integration tests for replacing the
 Database Migration Service-specific test variables.
 """
+from acktest.aws import identity
+from e2e.bootstrap_resources import get_bootstrap_resources
+
+BOOTSTRAP_RESOURCES = get_bootstrap_resources()
 
 REPLACEMENT_VALUES = {
+    # S3 bucket and IAM role used by Endpoint (S3 target) tests.
+    "S3_BUCKET_NAME": BOOTSTRAP_RESOURCES.TestBucket.name,
+    # The test bucket is bootstrapped in the current AWS account.
+    "S3_BUCKET_OWNER": identity.get_account_id(),
+    "DMS_S3_ROLE_ARN": BOOTSTRAP_RESOURCES.TestEndpointRole.arn,
 }

@@ -17,6 +17,7 @@ rules:
   - dms.services.k8s.aws
   resources:
   - certificates
+  - endpoints
   verbs:
   - create
   - delete
@@ -29,6 +30,7 @@ rules:
   - dms.services.k8s.aws
   resources:
   - certificates
+  - endpoints
   verbs:
   - get
   - patch

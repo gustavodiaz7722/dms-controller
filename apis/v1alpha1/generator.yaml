@@ -1,8 +1,8 @@
 ignore:
   field_paths:
-    # We ignore CertificateWallet and provide a custom field in the Spec
+    # We ignore CertificateWallet and provide a custom field in the Spec.
     - ImportCertificateInput.CertificateWallet
-    # We ignore this field as it becomes part of the Spec.Tags
+    # We ignore this field as it becomes part of Spec.Tags.
     # It is not used in our tagging logic and could result in confusing
     # mutations of other resources.
     - Tag.ResourceArn
@@ -10,7 +10,7 @@ ignore:
 #    - Certificate
     - DataMigration
     - DataProvider
-    - Endpoint
+#    - Endpoint
     - EventSubscription
     - FleetAdvisorCollector
     - InstanceProfile
@@ -35,7 +35,7 @@ resources:
       # We ignore this field from ImportCertificateInput and replace it with a
       # custom field in the Spec because []byte fields in combination with
       # is_secret are not properly handled by ACK code generator which causes
-      # type casting errors in newCreateRequestPayload()
+      # type casting errors in newCreateRequestPayload().
       CertificateWallet:
         is_secret: true
         type: "*string"
@@ -67,6 +67,312 @@ resources:
     # method to update Tags.
     update_operation:
       custom_method_name: customSdkUpdate
+  Endpoint:
+    exceptions:
+      errors:
+        404:
+          code: ResourceNotFoundFault
+      terminal_codes:
+        - InvalidParameterCombinationException
+        - InvalidParameterValueException
+    fields:
+      CertificateARN:
+        references:
+          resource: Certificate
+          path: Status.ACKResourceMetadata.ARN
+      DmsTransferSettings.ServiceAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      DocDBSettings.KMSKeyID:
+        references:
+          resource: Key
+          service_name: kms
+          path: Status.KeyID
+      DocDBSettings.Password:
+        is_secret: true
+      DocDBSettings.SecretsManagerAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      DocDBSettings.SecretsManagerSecretID:
+        references:
+          resource: Secret
+          service_name: secretsmanager
+          path: Status.ACKResourceMetadata.ARN
+      DynamoDBSettings.ServiceAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      ElasticsearchSettings.ServiceAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      EngineName:
+        is_immutable: true
+      EndpointStatus:
+        print:
+          name: Status
+      EndpointType:
+        is_immutable: true
+        print:
+          name: Type
+      GcpMySQLSettings.Password:
+        is_secret: true
+      GcpMySQLSettings.SecretsManagerAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      GcpMySQLSettings.SecretsManagerSecretID:
+        references:
+          resource: Secret
+          service_name: secretsmanager
+          path: Status.ACKResourceMetadata.ARN
+      IBMDB2Settings.Password:
+        is_secret: true
+      IBMDB2Settings.SecretsManagerAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      IBMDB2Settings.SecretsManagerSecretID:
+        references:
+          resource: Secret
+          service_name: secretsmanager
+          path: Status.ACKResourceMetadata.ARN
+      KafkaSettings.SASLPassword:
+        is_secret: true
+      KafkaSettings.SSLCaCertificateARN:
+        references:
+          resource: Certificate
+          path: Status.ACKResourceMetadata.ARN
+      KafkaSettings.SSLClientCertificateARN:
+        references:
+          resource: Certificate
+          path: Status.ACKResourceMetadata.ARN
+      KafkaSettings.SSLClientKeyARN:
+        references:
+          resource: Certificate
+          path: Status.ACKResourceMetadata.ARN
+      KafkaSettings.SSLClientKeyPassword:
+        is_secret: true
+      KinesisSettings.ServiceAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      KinesisSettings.StreamARN:
+        references:
+          resource: Stream
+          service_name: kinesis
+          path: Status.ACKResourceMetadata.ARN
+      KMSKeyID:
+        references:
+          resource: Key
+          service_name: kms
+          path: Status.KeyID
+      MicrosoftSQLServerSettings.Password:
+        is_secret: true
+      MicrosoftSQLServerSettings.SecretsManagerAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      MicrosoftSQLServerSettings.SecretsManagerSecretID:
+        references:
+          resource: Secret
+          service_name: secretsmanager
+          path: Status.ACKResourceMetadata.ARN
+      MongoDBSettings.KMSKeyID:
+        references:
+          resource: Key
+          service_name: kms
+          path: Status.KeyID
+      MongoDBSettings.Password:
+        is_secret: true
+      MongoDBSettings.SecretsManagerAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      MongoDBSettings.SecretsManagerSecretID:
+        references:
+          resource: Secret
+          service_name: secretsmanager
+          path: Status.ACKResourceMetadata.ARN
+      MySQLSettings.Password:
+        is_secret: true
+      MySQLSettings.SecretsManagerAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      MySQLSettings.SecretsManagerSecretID:
+        references:
+          resource: Secret
+          service_name: secretsmanager
+          path: Status.ACKResourceMetadata.ARN
+      MySQLSettings.ServiceAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      Name:
+        is_primary_key: true
+        is_immutable: true
+      NeptuneSettings.S3BucketName:
+        references:
+          resource: Bucket
+          service_name: s3
+          path: Spec.Name
+      NeptuneSettings.ServiceAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      OracleSettings.AsmPassword:
+        is_secret: true
+      OracleSettings.ExtraArchivedLogDestIDs:
+        compare:
+          is_ignored: true
+      OracleSettings.Password:
+        is_secret: true
+      OracleSettings.SecretsManagerAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      OracleSettings.SecretsManagerSecretID:
+        references:
+          resource: Secret
+          service_name: secretsmanager
+          path: Status.ACKResourceMetadata.ARN
+      Password:
+        is_secret: true
+      PostgreSQLSettings.Password:
+        is_secret: true
+      PostgreSQLSettings.SecretsManagerAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      PostgreSQLSettings.SecretsManagerSecretID:
+        references:
+          resource: Secret
+          service_name: secretsmanager
+          path: Status.ACKResourceMetadata.ARN
+      PostgreSQLSettings.ServiceAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      RedisSettings.AuthPassword:
+        is_secret: true
+      RedisSettings.SSLCaCertificateARN:
+        references:
+          resource: Certificate
+          path: Status.ACKResourceMetadata.ARN
+      RedshiftSettings.AuthPassword:
+        is_secret: true
+      RedshiftSettings.BucketName:
+        references:
+          resource: Bucket
+          service_name: s3
+          path: Spec.Name
+      RedshiftSettings.Password:
+        is_secret: true
+      RedshiftSettings.SecretsManagerAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      RedshiftSettings.SecretsManagerSecretID:
+        references:
+          resource: Secret
+          service_name: secretsmanager
+          path: Status.ACKResourceMetadata.ARN
+      RedshiftSettings.ServerSideEncryptionKMSKeyID:
+        references:
+          resource: Key
+          service_name: kms
+          path: Status.KeyID
+      RedshiftSettings.ServiceAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      ResourceIdentifier:
+        is_immutable: true
+      S3Settings.BucketName:
+        references:
+          resource: Bucket
+          service_name: s3
+          path: Spec.Name
+      S3Settings.ServerSideEncryptionKMSKeyID:
+        references:
+          resource: Key
+          service_name: kms
+          path: Status.KeyID
+      S3Settings.ServiceAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      ServiceAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      SybaseSettings.Password:
+        is_secret: true
+      SybaseSettings.SecretsManagerAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      SybaseSettings.SecretsManagerSecretID:
+        references:
+          resource: Secret
+          service_name: secretsmanager
+          path: Status.ACKResourceMetadata.ARN
+    hooks:
+      delta_pre_compare:
+        code: compareExtraArchivedLogDestIDs(delta, a, b)
+      sdk_create_post_set_output:
+        template_path: hooks/endpoint/sdk_create_post_set_output.go.tpl
+      sdk_delete_post_request:
+        template_path: hooks/endpoint/sdk_delete_post_request.go.tpl
+      sdk_delete_pre_build_request:
+        template_path: hooks/endpoint/sdk_delete_pre_build_request.go.tpl
+      sdk_read_many_post_build_request:
+        template_path: hooks/endpoint/sdk_read_many_post_build_request.go.tpl
+      sdk_read_many_post_set_output:
+        template_path: hooks/endpoint/sdk_read_many_post_set_output.go.tpl
+      sdk_update_pre_build_request:
+        template_path: hooks/endpoint/sdk_update_pre_build_request.go.tpl
+      sdk_update_post_set_output:
+        template_path: hooks/endpoint/sdk_update_post_set_output.go.tpl
+    print:
+      add_age_column: true
+      add_synced_column: true
+    renames:
+      operations:
+        CreateEndpoint:
+          input_fields:
+            EndpointIdentifier: Name
+          output_fields:
+            Status: EndpointStatus
+        DescribeEndpoints:
+          output_fields:
+            Status: EndpointStatus
+        ModifyEndpoint:
+          output_fields:
+            Status: EndpointStatus
 sdk_names:
   model_name: database-migration-service
   package_name: databasemigrationservice
