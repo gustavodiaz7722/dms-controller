@@ -7,7 +7,7 @@ require (
 	github.com/aws-controllers-k8s/iam-controller v1.7.0
 	github.com/aws-controllers-k8s/kinesis-controller v1.3.0
 	github.com/aws-controllers-k8s/kms-controller v1.3.0
-	github.com/aws-controllers-k8s/runtime v0.59.1
+	github.com/aws-controllers-k8s/runtime v0.60.0
 	github.com/aws-controllers-k8s/s3-controller v1.6.0
 	github.com/aws-controllers-k8s/secretsmanager-controller v1.3.0
 	github.com/aws/aws-sdk-go v1.49.0
