@@ -18,6 +18,12 @@ resources:
         prepend: |-
           Reference to an ACK managed IAM role resource that you want to use as the
           service access role to creates the endpoint.
+  EventSubscription:
+    fields:
+      SnsTopicRef:
+        prepend: |-
+          Reference to an ACK managed Amazon SNS topic resource created for event
+          notification.
   ReplicationSubnetGroup:
     fields:
       SubnetRefs:

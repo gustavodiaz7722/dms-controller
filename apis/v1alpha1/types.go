@@ -364,6 +364,7 @@ type EngineVersion struct {
 // categories, the date and source of the event, and the DMS resource type.
 type Event struct {
 	Date             *metav1.Time `json:"date,omitempty"`
+	EventCategories  []*string    `json:"eventCategories,omitempty"`
 	Message          *string      `json:"message,omitempty"`
 	SourceIdentifier *string      `json:"sourceIdentifier,omitempty"`
 }
@@ -373,18 +374,22 @@ type Event struct {
 // (https://docs.aws.amazon.com/dms/latest/APIReference/API_EventCategoryGroup.html)
 // action.
 type EventCategoryGroup struct {
-	SourceType *string `json:"sourceType,omitempty"`
+	EventCategories []*string `json:"eventCategories,omitempty"`
+	SourceType      *string   `json:"sourceType,omitempty"`
 }
 
 // Describes an event notification subscription created by the CreateEventSubscription
 // operation.
-type EventSubscription struct {
-	CustSubscriptionID       *string `json:"custSubscriptionID,omitempty"`
-	CustomerAWSID            *string `json:"customerAWSID,omitempty"`
-	SNSTopicARN              *string `json:"snsTopicARN,omitempty"`
-	SourceType               *string `json:"sourceType,omitempty"`
-	Status                   *string `json:"status,omitempty"`
-	SubscriptionCreationTime *string `json:"subscriptionCreationTime,omitempty"`
+type EventSubscription_SDK struct {
+	CustSubscriptionID       *string   `json:"custSubscriptionID,omitempty"`
+	CustomerAWSID            *string   `json:"customerAWSID,omitempty"`
+	Enabled                  *bool     `json:"enabled,omitempty"`
+	EventCategoriesList      []*string `json:"eventCategoriesList,omitempty"`
+	SNSTopicARN              *string   `json:"snsTopicARN,omitempty"`
+	SourceIDsList            []*string `json:"sourceIDsList,omitempty"`
+	SourceType               *string   `json:"sourceType,omitempty"`
+	Status                   *string   `json:"status,omitempty"`
+	SubscriptionCreationTime *string   `json:"subscriptionCreationTime,omitempty"`
 }
 
 // Provides information about an exported metadata model assessment.
@@ -888,6 +893,7 @@ type PostgreSQLSettings struct {
 // The results returned in describe-replications to display the results of the
 // premigration assessment from the replication configuration.
 type PremigrationAssessmentStatus struct {
+	FailOnAssessmentFailure               *bool        `json:"failOnAssessmentFailure,omitempty"`
 	LastFailureMessage                    *string      `json:"lastFailureMessage,omitempty"`
 	PremigrationAssessmentRunARN          *string      `json:"premigrationAssessmentRunARN,omitempty"`
 	PremigrationAssessmentRunCreationDate *metav1.Time `json:"premigrationAssessmentRunCreationDate,omitempty"`
@@ -914,6 +920,7 @@ type Progress struct {
 type ProvisionData struct {
 	DateNewProvisioningDataAvailable *metav1.Time `json:"dateNewProvisioningDataAvailable,omitempty"`
 	DateProvisioned                  *metav1.Time `json:"dateProvisioned,omitempty"`
+	IsNewProvisioningAvailable       *bool        `json:"isNewProvisioningAvailable,omitempty"`
 	ProvisionState                   *string      `json:"provisionState,omitempty"`
 	ProvisionedCapacityUnits         *int64       `json:"provisionedCapacityUnits,omitempty"`
 	ReasonForNewProvisioningData     *string      `json:"reasonForNewProvisioningData,omitempty"`
@@ -1082,14 +1089,17 @@ type ReplicationConfig struct {
 // Provides information that defines a replication instance.
 type ReplicationInstance struct {
 	AllocatedStorage                    *int64       `json:"allocatedStorage,omitempty"`
+	AutoMinorVersionUpgrade             *bool        `json:"autoMinorVersionUpgrade,omitempty"`
 	AvailabilityZone                    *string      `json:"availabilityZone,omitempty"`
 	DNSNameServers                      *string      `json:"dnsNameServers,omitempty"`
 	EngineVersion                       *string      `json:"engineVersion,omitempty"`
 	FreeUntil                           *metav1.Time `json:"freeUntil,omitempty"`
 	InstanceCreateTime                  *metav1.Time `json:"instanceCreateTime,omitempty"`
 	KMSKeyID                            *string      `json:"kmsKeyID,omitempty"`
+	MultiAZ                             *bool        `json:"multiAZ,omitempty"`
 	NetworkType                         *string      `json:"networkType,omitempty"`
 	PreferredMaintenanceWindow          *string      `json:"preferredMaintenanceWindow,omitempty"`
+	PubliclyAccessible                  *bool        `json:"publiclyAccessible,omitempty"`
 	ReplicationInstanceARN              *string      `json:"replicationInstanceARN,omitempty"`
 	ReplicationInstanceIdentifier       *string      `json:"replicationInstanceIdentifier,omitempty"`
 	ReplicationInstancePrivateIPAddress *string      `json:"replicationInstancePrivateIPAddress,omitempty"`
@@ -1183,6 +1193,7 @@ type ReplicationTaskAssessmentResult struct {
 // the ReplicationTaskAssessmentRun object.
 type ReplicationTaskAssessmentRun struct {
 	AssessmentRunName                        *string      `json:"assessmentRunName,omitempty"`
+	IsLatestTaskAssessmentRun                *bool        `json:"isLatestTaskAssessmentRun,omitempty"`
 	LastFailureMessage                       *string      `json:"lastFailureMessage,omitempty"`
 	ReplicationTaskARN                       *string      `json:"replicationTaskARN,omitempty"`
 	ReplicationTaskAssessmentRunARN          *string      `json:"replicationTaskAssessmentRunARN,omitempty"`
@@ -1368,6 +1379,7 @@ type SupportedEndpointType struct {
 	EngineDisplayName                       *string `json:"engineDisplayName,omitempty"`
 	EngineName                              *string `json:"engineName,omitempty"`
 	ReplicationInstanceEngineMinimumVersion *string `json:"replicationInstanceEngineMinimumVersion,omitempty"`
+	SupportsCDC                             *bool   `json:"supportsCDC,omitempty"`
 }
 
 // Provides information that defines an SAP ASE data provider.

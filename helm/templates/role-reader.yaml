@@ -18,6 +18,7 @@ rules:
   resources:
   - certificates
   - endpoints
+  - eventsubscriptions
   - replicationsubnetgroups
   verbs:
   - get

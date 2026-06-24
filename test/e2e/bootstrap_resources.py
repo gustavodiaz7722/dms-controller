@@ -19,6 +19,7 @@ from dataclasses import dataclass
 from acktest.bootstrapping import Resources
 from acktest.bootstrapping.iam import Role
 from acktest.bootstrapping.s3 import Bucket
+from acktest.bootstrapping.sns import Topic
 from acktest.bootstrapping.vpc import VPC
 from e2e import bootstrap_directory
 
@@ -26,6 +27,7 @@ from e2e import bootstrap_directory
 class BootstrapResources(Resources):
     TestBucket: Bucket
     TestEndpointRole: Role
+    TestTopic: Topic
     TestVPC: VPC
 
 _bootstrap_resources = None

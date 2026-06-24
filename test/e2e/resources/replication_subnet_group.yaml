@@ -8,6 +8,3 @@ spec:
   subnetIDs:
     - $PUBLIC_SUBNET_1
     - $PUBLIC_SUBNET_2
-  tags:
-    - key: environment
-      value: dev

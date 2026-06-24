@@ -152,6 +152,7 @@ reconcile:
   resources:
     - Certificate
     - Endpoint
+    - EventSubscription
     - ReplicationSubnetGroup
 
 serviceAccount:

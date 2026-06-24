@@ -10,6 +10,7 @@ require (
 	github.com/aws-controllers-k8s/runtime v0.60.0
 	github.com/aws-controllers-k8s/s3-controller v1.6.0
 	github.com/aws-controllers-k8s/secretsmanager-controller v1.3.0
+	github.com/aws-controllers-k8s/sns-controller v1.5.0
 	github.com/aws/aws-sdk-go v1.49.0
 	github.com/aws/aws-sdk-go-v2 v1.41.7
 	github.com/aws/aws-sdk-go-v2/service/databasemigrationservice v1.63.0
