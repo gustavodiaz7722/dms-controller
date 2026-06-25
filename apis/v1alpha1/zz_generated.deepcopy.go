@@ -3829,10 +3829,20 @@ func (in *OracleSettings) DeepCopyInto(out *OracleSettings) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.SecretsManagerOracleAsmAccessRoleRef != nil {
+		in, out := &in.SecretsManagerOracleAsmAccessRoleRef, &out.SecretsManagerOracleAsmAccessRoleRef
+		*out = new(corev1alpha1.AWSResourceReferenceWrapper)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.SecretsManagerOracleAsmSecretID != nil {
 		in, out := &in.SecretsManagerOracleAsmSecretID, &out.SecretsManagerOracleAsmSecretID
 		*out = new(string)
 		**out = **in
+	}
+	if in.SecretsManagerOracleAsmSecretRef != nil {
+		in, out := &in.SecretsManagerOracleAsmSecretRef, &out.SecretsManagerOracleAsmSecretRef
+		*out = new(corev1alpha1.AWSResourceReferenceWrapper)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.SecretsManagerSecretID != nil {
 		in, out := &in.SecretsManagerSecretID, &out.SecretsManagerSecretID

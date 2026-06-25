@@ -247,6 +247,16 @@ resources:
           resource: Role
           service_name: iam
           path: Status.ACKResourceMetadata.ARN
+      OracleSettings.SecretsManagerOracleAsmAccessRoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      OracleSettings.SecretsManagerOracleAsmSecretID:
+        references:
+          resource: Secret
+          service_name: secretsmanager
+          path: Status.ACKResourceMetadata.ARN
       OracleSettings.SecretsManagerSecretID:
         references:
           resource: Secret

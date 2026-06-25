@@ -108,6 +108,12 @@ import (
 // +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles,verbs=get;list
 // +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles/status,verbs=get;list
 
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles,verbs=get;list
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=secretsmanager.services.k8s.aws,resources=secrets,verbs=get;list
+// +kubebuilder:rbac:groups=secretsmanager.services.k8s.aws,resources=secrets/status,verbs=get;list
+
 // +kubebuilder:rbac:groups=secretsmanager.services.k8s.aws,resources=secrets,verbs=get;list
 // +kubebuilder:rbac:groups=secretsmanager.services.k8s.aws,resources=secrets/status,verbs=get;list
 
@@ -321,6 +327,18 @@ func (rm *resourceManager) ClearResolvedReferences(res acktypes.AWSResource) ack
 	if ko.Spec.OracleSettings != nil {
 		if ko.Spec.OracleSettings.SecretsManagerAccessRoleRef != nil {
 			ko.Spec.OracleSettings.SecretsManagerAccessRoleARN = nil
+		}
+	}
+
+	if ko.Spec.OracleSettings != nil {
+		if ko.Spec.OracleSettings.SecretsManagerOracleAsmAccessRoleRef != nil {
+			ko.Spec.OracleSettings.SecretsManagerOracleAsmAccessRoleARN = nil
+		}
+	}
+
+	if ko.Spec.OracleSettings != nil {
+		if ko.Spec.OracleSettings.SecretsManagerOracleAsmSecretRef != nil {
+			ko.Spec.OracleSettings.SecretsManagerOracleAsmSecretID = nil
 		}
 	}
 
@@ -605,6 +623,18 @@ func (rm *resourceManager) ResolveReferences(
 		resourceHasReferences = resourceHasReferences || fieldHasReferences
 	}
 
+	if fieldHasReferences, err := rm.resolveReferenceForOracleSettings_SecretsManagerOracleAsmAccessRoleARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForOracleSettings_SecretsManagerOracleAsmSecretID(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
 	if fieldHasReferences, err := rm.resolveReferenceForOracleSettings_SecretsManagerSecretID(ctx, apiReader, ko); err != nil {
 		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
 	} else {
@@ -869,6 +899,18 @@ func validateReferenceFields(ko *svcapitypes.Endpoint) error {
 	if ko.Spec.OracleSettings != nil {
 		if ko.Spec.OracleSettings.SecretsManagerAccessRoleRef != nil && ko.Spec.OracleSettings.SecretsManagerAccessRoleARN != nil {
 			return ackerr.ResourceReferenceAndIDNotSupportedFor("OracleSettings.SecretsManagerAccessRoleARN", "OracleSettings.SecretsManagerAccessRoleRef")
+		}
+	}
+
+	if ko.Spec.OracleSettings != nil {
+		if ko.Spec.OracleSettings.SecretsManagerOracleAsmAccessRoleRef != nil && ko.Spec.OracleSettings.SecretsManagerOracleAsmAccessRoleARN != nil {
+			return ackerr.ResourceReferenceAndIDNotSupportedFor("OracleSettings.SecretsManagerOracleAsmAccessRoleARN", "OracleSettings.SecretsManagerOracleAsmAccessRoleRef")
+		}
+	}
+
+	if ko.Spec.OracleSettings != nil {
+		if ko.Spec.OracleSettings.SecretsManagerOracleAsmSecretRef != nil && ko.Spec.OracleSettings.SecretsManagerOracleAsmSecretID != nil {
+			return ackerr.ResourceReferenceAndIDNotSupportedFor("OracleSettings.SecretsManagerOracleAsmSecretID", "OracleSettings.SecretsManagerOracleAsmSecretRef")
 		}
 	}
 
@@ -2374,6 +2416,84 @@ func (rm *resourceManager) resolveReferenceForOracleSettings_SecretsManagerAcces
 				return hasReferences, err
 			}
 			ko.Spec.OracleSettings.SecretsManagerAccessRoleARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// resolveReferenceForOracleSettings_SecretsManagerOracleAsmAccessRoleARN reads the resource referenced
+// from OracleSettings.SecretsManagerOracleAsmAccessRoleRef field and sets the OracleSettings.SecretsManagerOracleAsmAccessRoleARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForOracleSettings_SecretsManagerOracleAsmAccessRoleARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.Endpoint,
+) (hasReferences bool, err error) {
+	if ko.Spec.OracleSettings != nil {
+		if ko.Spec.OracleSettings.SecretsManagerOracleAsmAccessRoleRef != nil && ko.Spec.OracleSettings.SecretsManagerOracleAsmAccessRoleRef.From != nil {
+			hasReferences = true
+			arr := ko.Spec.OracleSettings.SecretsManagerOracleAsmAccessRoleRef.From
+			if arr.Name == nil || *arr.Name == "" {
+				return hasReferences, fmt.Errorf("provided resource reference is nil or empty: OracleSettings.SecretsManagerOracleAsmAccessRoleRef")
+			}
+			namespace, err := ackrt.ResolveCrossNamespaceReference(
+				ctx,
+				rm.cfg.EnableCrossNamespace,
+				&ko.Status.Conditions,
+				ackrt.CrossNamespaceRefKindResource,
+				ko.ObjectMeta.GetNamespace(),
+				arr.Namespace,
+				*arr.Name,
+			)
+			if err != nil {
+				return hasReferences, err
+			}
+			obj := &iamapitypes.Role{}
+			if err := getReferencedResourceState_Role(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+				return hasReferences, err
+			}
+			ko.Spec.OracleSettings.SecretsManagerOracleAsmAccessRoleARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// resolveReferenceForOracleSettings_SecretsManagerOracleAsmSecretID reads the resource referenced
+// from OracleSettings.SecretsManagerOracleAsmSecretRef field and sets the OracleSettings.SecretsManagerOracleAsmSecretID
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForOracleSettings_SecretsManagerOracleAsmSecretID(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.Endpoint,
+) (hasReferences bool, err error) {
+	if ko.Spec.OracleSettings != nil {
+		if ko.Spec.OracleSettings.SecretsManagerOracleAsmSecretRef != nil && ko.Spec.OracleSettings.SecretsManagerOracleAsmSecretRef.From != nil {
+			hasReferences = true
+			arr := ko.Spec.OracleSettings.SecretsManagerOracleAsmSecretRef.From
+			if arr.Name == nil || *arr.Name == "" {
+				return hasReferences, fmt.Errorf("provided resource reference is nil or empty: OracleSettings.SecretsManagerOracleAsmSecretRef")
+			}
+			namespace, err := ackrt.ResolveCrossNamespaceReference(
+				ctx,
+				rm.cfg.EnableCrossNamespace,
+				&ko.Status.Conditions,
+				ackrt.CrossNamespaceRefKindResource,
+				ko.ObjectMeta.GetNamespace(),
+				arr.Namespace,
+				*arr.Name,
+			)
+			if err != nil {
+				return hasReferences, err
+			}
+			obj := &secretsmanagerapitypes.Secret{}
+			if err := getReferencedResourceState_Secret(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+				return hasReferences, err
+			}
+			ko.Spec.OracleSettings.SecretsManagerOracleAsmSecretID = (*string)(obj.Status.ACKResourceMetadata.ARN)
 		}
 	}
 

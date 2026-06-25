@@ -800,8 +800,12 @@ type OracleSettings struct {
 	// Reference field for SecretsManagerAccessRoleARN
 	SecretsManagerAccessRoleRef          *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerAccessRoleRef,omitempty"`
 	SecretsManagerOracleAsmAccessRoleARN *string                                  `json:"secretsManagerOracleAsmAccessRoleARN,omitempty"`
+	// Reference field for SecretsManagerOracleAsmAccessRoleARN
+	SecretsManagerOracleAsmAccessRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerOracleAsmAccessRoleRef,omitempty"`
 	SecretsManagerOracleAsmSecretID      *string                                  `json:"secretsManagerOracleAsmSecretID,omitempty"`
-	SecretsManagerSecretID               *string                                  `json:"secretsManagerSecretID,omitempty"`
+	// Reference field for SecretsManagerOracleAsmSecretID
+	SecretsManagerOracleAsmSecretRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerOracleAsmSecretRef,omitempty"`
+	SecretsManagerSecretID           *string                                  `json:"secretsManagerSecretID,omitempty"`
 	// Reference field for SecretsManagerSecretID
 	SecretsManagerSecretRef                *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretsManagerSecretRef,omitempty"`
 	SecurityDBEncryption                   *string                                  `json:"securityDBEncryption,omitempty"`

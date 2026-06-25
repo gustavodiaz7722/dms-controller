@@ -1181,8 +1181,36 @@ spec:
                     type: object
                   secretsManagerOracleAsmAccessRoleARN:
                     type: string
+                  secretsManagerOracleAsmAccessRoleRef:
+                    description: Reference field for SecretsManagerOracleAsmAccessRoleARN
+                    properties:
+                      from:
+                        description: |-
+                          AWSResourceReference provides all the values necessary to reference another
+                          k8s resource for finding the identifier(Id/ARN/Name)
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        type: object
+                    type: object
                   secretsManagerOracleAsmSecretID:
                     type: string
+                  secretsManagerOracleAsmSecretRef:
+                    description: Reference field for SecretsManagerOracleAsmSecretID
+                    properties:
+                      from:
+                        description: |-
+                          AWSResourceReference provides all the values necessary to reference another
+                          k8s resource for finding the identifier(Id/ARN/Name)
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        type: object
+                    type: object
                   secretsManagerSecretID:
                     type: string
                   secretsManagerSecretRef:
